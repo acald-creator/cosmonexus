@@ -2,16 +2,35 @@
 	"name": "@cosmonexus/design-tokens",
 	"version": "0.0.1",
 	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js",
 			"require": "./dist/index.cjs"
+		},
+		"./contract": {
+			"types": "./dist/contract.css.d.ts",
+			"import": "./dist/contract.css.js",
+			"require": "./dist/contract.css.cjs"
+		},
+		"./themes/dark": {
+			"types": "./dist/themes/dark.css.d.ts",
+			"import": "./dist/themes/dark.css.js",
+			"require": "./dist/themes/dark.css.cjs"
+		},
+		"./global": {
+			"types": "./dist/global.css.d.ts",
+			"import": "./dist/global.css.js",
+			"require": "./dist/global.css.cjs"
 		}
 	},
-	"files": ["dist"],
+	"files": ["dist/**", "src/**"],
+	"sideEffects": false,
 	"scripts": {
-		"build": "tsdown",
+		"build": "tsup",
 		"test": "vitest run",
 		"lint": "biome check .",
 		"typecheck": "tsc --noEmit"
