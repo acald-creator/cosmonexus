@@ -60,6 +60,7 @@
         "@cosmonexus/design-tokens": "workspace:*",
         "@cosmonexus/nova-store": "workspace:*",
         "@cosmonexus/nova-svelte": "workspace:*",
+        "@cosmonexus/prose": "workspace:*",
         "@cosmonexus/stellate": "workspace:*",
         "@cosmonexus/tsconfig": "workspace:*",
         "@sveltejs/adapter-static": "^3.0.0",

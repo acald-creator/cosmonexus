@@ -76,6 +76,7 @@ console.log(result)
 		<p class="subtitle">
 			Demonstrating <code>@cosmonexus/nova-svelte</code> — reactive stores, signals, and the CodeMirror editor component.
 		</p>
+		<a href="/novel" class="novel-link">Open Novel Editor →</a>
 	</header>
 
 	<section class="demos">
@@ -151,6 +152,24 @@ console.log(result)
 	.subtitle {
 		color: #565f89;
 		font-size: 1rem;
+	}
+
+	.novel-link {
+		display: inline-block;
+		margin-top: 0.75rem;
+		padding: 0.5rem 1rem;
+		background: #24283b;
+		border: 1px solid #7aa2f7;
+		border-radius: 8px;
+		color: #7aa2f7;
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: all 0.15s;
+	}
+
+	.novel-link:hover {
+		background: #7aa2f7;
+		color: #1a1b26;
 	}
 
 	code {
