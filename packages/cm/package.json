@@ -1,0 +1,58 @@
+{
+	"name": "@cosmonexus/cm",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		"./core": {
+			"types": "./dist/core/index.d.ts",
+			"import": "./dist/core/index.js",
+			"require": "./dist/core/index.cjs"
+		},
+		"./langpack": {
+			"types": "./dist/langpack/index.d.ts",
+			"import": "./dist/langpack/index.js",
+			"require": "./dist/langpack/index.cjs"
+		},
+		"./language": {
+			"types": "./dist/language/index.d.ts",
+			"import": "./dist/language/index.js",
+			"require": "./dist/language/index.cjs"
+		},
+		"./lint": {
+			"types": "./dist/lint/index.d.ts",
+			"import": "./dist/lint/index.js",
+			"require": "./dist/lint/index.cjs"
+		},
+		"./state": {
+			"types": "./dist/state/index.d.ts",
+			"import": "./dist/state/index.js",
+			"require": "./dist/state/index.cjs"
+		},
+		"./view": {
+			"types": "./dist/view/index.d.ts",
+			"import": "./dist/view/index.js",
+			"require": "./dist/view/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsdown",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@codemirror/language": "^6.9.0",
+		"@codemirror/legacy-modes": "^6.3.3",
+		"@codemirror/lint": "^6.4.1",
+		"@codemirror/state": "^6.2.1",
+		"@codemirror/view": "^6.17.1",
+		"codemirror": "^6.0.1"
+	},
+	"devDependencies": {
+		"@cosmonexus/tsconfig": "workspace:*"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

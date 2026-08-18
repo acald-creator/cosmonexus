@@ -1,0 +1,4 @@
+{
+	"extends": "@cosmonexus/tsconfig/app.json",
+	"include": ["src"]
+}

@@ -1,0 +1,28 @@
+{
+	"name": "@cosmonexus/stellate",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsdown",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@cosmonexus/cm": "workspace:*"
+	},
+	"devDependencies": {
+		"@cosmonexus/tsconfig": "workspace:*"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

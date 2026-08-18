@@ -1,0 +1,15 @@
+{
+	"name": "@cosmonexus/docs",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "echo \"TODO: configure dev server\"",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@cosmonexus/nova-ui": "workspace:*",
+		"@cosmonexus/tsconfig": "workspace:*"
+	}
+}

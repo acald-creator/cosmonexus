@@ -1,0 +1,36 @@
+{
+	"name": "@cosmonexus/nova-react",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsdown",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@cosmonexus/nova-store": "workspace:*",
+		"@cosmonexus/nova-types": "workspace:*"
+	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"rxjs": "^7.8.0"
+	},
+	"devDependencies": {
+		"@cosmonexus/tsconfig": "workspace:*",
+		"@types/react": "^18.2.0",
+		"react": "^18.2.0",
+		"rxjs": "^7.8.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

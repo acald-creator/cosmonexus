@@ -1,0 +1,32 @@
+{
+	"name": "@cosmonexus/nova-ui-solid",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsdown",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@cosmonexus/design-tokens": "workspace:*"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.8.0"
+	},
+	"devDependencies": {
+		"@cosmonexus/tsconfig": "workspace:*",
+		"solid-js": "^1.8.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

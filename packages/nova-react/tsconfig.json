@@ -1,0 +1,7 @@
+{
+	"extends": "@cosmonexus/tsconfig/library.json",
+	"compilerOptions": {
+		"jsx": "react-jsx"
+	},
+	"include": ["src"]
+}

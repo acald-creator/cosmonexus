@@ -1,0 +1,20 @@
+type: application
+language: typescript
+
+tasks:
+  dev:
+    command: echo "TODO: configure dev server"
+    local: true
+
+  lint:
+    command: biome check .
+    inputs:
+      - src/**/*
+
+  typecheck:
+    command: tsc --noEmit
+    inputs:
+      - src/**/*
+      - tsconfig.json
+    deps:
+      - ^:build
