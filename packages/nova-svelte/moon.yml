@@ -1,0 +1,35 @@
+type: library
+language: typescript
+
+tasks:
+  build:
+    command: svelte-package
+    inputs:
+      - src/lib/**/*
+      - svelte.config.js
+      - package.json
+    outputs:
+      - dist/**/*
+    deps:
+      - ^:build
+
+  test:
+    command: vitest run
+    inputs:
+      - src/**/*
+      - vitest.config.ts
+    deps:
+      - ~:build
+
+  lint:
+    command: biome check .
+    inputs:
+      - src/lib/**/*
+
+  typecheck:
+    command: svelte-check --tsconfig ./tsconfig.json
+    inputs:
+      - src/lib/**/*
+      - tsconfig.json
+    deps:
+      - ^:build
