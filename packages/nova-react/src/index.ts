@@ -13,3 +13,17 @@ export { createStateMachine, states } from './create-state-machine'
 
 // Utils
 export { compact } from './utils/compact'
+
+// Types (UI/Component/Machine)
+export type {
+	Dict,
+	Direction,
+	Orientation,
+	DirectionProperty,
+	CommonProperties,
+	RootProperties,
+	Context,
+	PropTypes,
+	MachineContextType,
+	MachineStateType,
+} from './types'

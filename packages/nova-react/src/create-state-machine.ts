@@ -1,5 +1,5 @@
 import { createEffect } from '@cosmonexus/nova-store'
-import type { MachineContextType, MachineStateType } from '@cosmonexus/nova-types'
+import type { MachineContextType, MachineStateType } from './types'
 import {
 	BehaviorSubject,
 	type Observable,
