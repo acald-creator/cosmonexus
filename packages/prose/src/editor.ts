@@ -1,6 +1,6 @@
 import { EditorState, type Transaction } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
-import type { Node as ProsemirrorNode } from 'prosemirror-model'
+import { DOMSerializer, type Node as ProsemirrorNode } from 'prosemirror-model'
 import { toggleMark } from 'prosemirror-commands'
 import { novelSchema, type NovelSchema } from './schema'
 import { createNovelPlugins, wordCountPluginKey, type NovelPluginOptions, type WordCount } from './plugins'
@@ -106,7 +106,6 @@ export class NovelEditor {
 	getHTML(): string {
 		if (!this.view) return ''
 		const fragment = document.createElement('div')
-		const { DOMSerializer } = require('prosemirror-model')
 		const serializer = DOMSerializer.fromSchema(this.schema)
 		const dom = serializer.serializeFragment(this.view.state.doc.content)
 		fragment.appendChild(dom)

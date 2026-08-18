@@ -4,6 +4,7 @@
 	import { CodeEditor, fromObservable, fromSignal } from '@cosmonexus/nova-svelte'
 	import { createSignal } from '@cosmonexus/nova-store'
 	import { BehaviorSubject } from 'rxjs'
+	import { basicSetup } from '@cosmonexus/cm/core'
 
 	const theme = writable({
 		colors: {
@@ -86,6 +87,7 @@ console.log(result)
 			<div class="editor-wrapper">
 				<CodeEditor
 					content={editorContent}
+					extensions={[basicSetup]}
 					onchange={handleChange}
 				/>
 			</div>

@@ -11,6 +11,7 @@ import {
 } from 'prosemirror-inputrules'
 import { Plugin, PluginKey } from 'prosemirror-state'
 import type { EditorView } from 'prosemirror-view'
+import { Decoration, DecorationSet } from 'prosemirror-view'
 import type { Schema } from 'prosemirror-model'
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list'
 import { novelSchema } from './schema'
@@ -185,7 +186,6 @@ export function placeholderPlugin(text: string) {
 			decorations(state) {
 				const { doc } = state
 				if (doc.childCount === 1 && doc.firstChild?.isTextblock && doc.firstChild.content.size === 0) {
-					const { Decoration, DecorationSet } = require('prosemirror-view')
 					const placeholder = Decoration.node(0, doc.firstChild.nodeSize, {
 						class: 'novel-placeholder',
 						'data-placeholder': text,

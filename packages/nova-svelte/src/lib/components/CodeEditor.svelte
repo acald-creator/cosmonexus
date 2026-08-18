@@ -6,7 +6,7 @@
 	import { EditorState, Compartment } from '@cosmonexus/cm/state'
 	import type { Extension } from '@cosmonexus/cm/state'
 
-	/** Initial document content. */
+	/** Initial document content (only used at mount time). */
 	export let content: string = ''
 
 	/** CodeMirror extensions to apply. */
@@ -35,7 +35,6 @@
 	let container: HTMLDivElement
 	let editor: Editor | undefined
 	let view: EditorView | undefined
-	const compartment = new Compartment()
 
 	/** Get the current editor instance (for imperative access). */
 	export function getEditor(): Editor | undefined {
@@ -57,20 +56,19 @@
 		return editor?.getContent() ?? ''
 	}
 
-	function buildExtensions(): Extension[] {
+	onMount(() => {
+		editor = new Editor(config, options)
+
 		const allExtensions: Extension[] = [...extensions]
 
-		// Read-only state
 		if (readonly) {
 			allExtensions.push(EditorState.readOnly.of(true))
 		}
 
-		// Update listener for content change events
 		allExtensions.push(
 			EditorView.updateListener.of((update) => {
 				if (update.docChanged) {
-					const newContent = update.state.doc.toString()
-					dispatch('change', { content: newContent })
+					dispatch('change', { content: update.state.doc.toString() })
 				}
 				if (update.focusChanged) {
 					if (update.view.hasFocus) {
@@ -82,15 +80,9 @@
 			}),
 		)
 
-		return allExtensions
-	}
-
-	onMount(() => {
-		editor = new Editor(config, options)
-
 		const state = EditorState.create({
 			doc: content,
-			extensions: compartment.of(buildExtensions()),
+			extensions: allExtensions,
 		})
 
 		view = new EditorView({
@@ -109,24 +101,6 @@
 			view = undefined
 		}
 	})
-
-	// Reactively update extensions when props change
-	$: if (view) {
-		view.dispatch({
-			effects: compartment.reconfigure(buildExtensions()),
-		})
-	}
-
-	// Reactively sync content from parent (only if it differs from current doc)
-	$: if (view && content !== view.state.doc.toString()) {
-		view.dispatch({
-			changes: {
-				from: 0,
-				to: view.state.doc.length,
-				insert: content,
-			},
-		})
-	}
 </script>
 
 <div bind:this={container} class="nova-code-editor {className}" role="textbox" aria-multiline="true"></div>
