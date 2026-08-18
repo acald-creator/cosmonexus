@@ -1,0 +1,32 @@
+type: application
+language: typescript
+
+tasks:
+  dev:
+    command: vite dev
+    local: true
+
+  build:
+    command: vite build
+    inputs:
+      - src/**/*
+      - svelte.config.js
+      - vite.config.ts
+      - package.json
+    outputs:
+      - build/**/*
+    deps:
+      - ^:build
+
+  lint:
+    command: biome check .
+    inputs:
+      - src/**/*
+
+  typecheck:
+    command: svelte-check --tsconfig ./tsconfig.json
+    inputs:
+      - src/**/*
+      - tsconfig.json
+    deps:
+      - ^:build

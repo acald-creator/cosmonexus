@@ -18,6 +18,7 @@
 		"typecheck": "svelte-check --tsconfig ./tsconfig.json"
 	},
 	"dependencies": {
+		"@cosmonexus/cm": "workspace:*",
 		"@cosmonexus/nova-store": "workspace:*",
 		"@cosmonexus/nova-types": "workspace:*",
 		"@cosmonexus/stellate": "workspace:*"
