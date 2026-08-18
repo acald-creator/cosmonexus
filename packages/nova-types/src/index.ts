@@ -133,3 +133,9 @@ export type Subscriber = {
 
 /** A signal tuple: [getter, setter]. */
 export type Signal<T> = [() => T, (value: T) => void]
+
+/** A function that disposes a reactive subscription or effect. */
+export type Dispose = () => void
+
+/** A read-only signal (getter only, typically from createMemo). */
+export type ReadonlySignal<T> = () => T
