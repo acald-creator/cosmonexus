@@ -7,5 +7,10 @@ export default defineConfig({
 	target: 'es2022',
 	sourcemap: true,
 	clean: true,
-	external: ['solid-js'],
+	external: [
+		'solid-js',
+		'@vanilla-extract/css',
+		'@vanilla-extract/recipes',
+		'@cosmonexus/design-tokens',
+	],
 })

@@ -7,5 +7,11 @@ export default defineConfig({
 	target: 'es2022',
 	sourcemap: true,
 	clean: true,
-	external: ['react', 'react-dom'],
+	external: [
+		'react',
+		'react-dom',
+		'@vanilla-extract/css',
+		'@vanilla-extract/recipes',
+		'@cosmonexus/design-tokens',
+	],
 })
