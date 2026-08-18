@@ -12,6 +12,10 @@ export default defineConfig({
 				__dirname,
 				'../../packages/design-tokens/src/themes/dark.css.ts',
 			),
+			'@cosmonexus/design-tokens/themes/light': resolve(
+				__dirname,
+				'../../packages/design-tokens/src/themes/light.css.ts',
+			),
 			'@cosmonexus/design-tokens/global': resolve(
 				__dirname,
 				'../../packages/design-tokens/src/global.css.ts',

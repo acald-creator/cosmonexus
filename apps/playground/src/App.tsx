@@ -1,3 +1,5 @@
+import { darkTheme } from '@cosmonexus/design-tokens/themes/dark'
+import { lightTheme } from '@cosmonexus/design-tokens/themes/light'
 import {
 	Alert,
 	Button,
@@ -54,13 +56,44 @@ const headingStyle: React.CSSProperties = {
 	fontSize: '1.25rem',
 }
 
+function useThemeToggle() {
+	const [isDark, setIsDark] = useState(true)
+
+	const toggle = () => {
+		const html = document.documentElement
+		if (isDark) {
+			html.classList.remove(darkTheme)
+			html.classList.add(lightTheme)
+		} else {
+			html.classList.remove(lightTheme)
+			html.classList.add(darkTheme)
+		}
+		setIsDark(!isDark)
+	}
+
+	return { isDark, toggle }
+}
+
 export function App() {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [tableLoading, setTableLoading] = useState(false)
+	const { isDark, toggle } = useThemeToggle()
 
 	return (
 		<div style={containerStyle}>
-			<h1 style={{ marginBottom: '2rem' }}>Nova UI Playground</h1>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					marginBottom: '2rem',
+				}}
+			>
+				<h1>Nova UI Playground</h1>
+				<Button variant="secondary" size="small" onClick={toggle}>
+					{isDark ? '☀️ Light' : '🌙 Dark'}
+				</Button>
+			</div>
 
 			{/* Buttons */}
 			<section style={sectionStyle}>

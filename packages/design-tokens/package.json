@@ -17,6 +17,11 @@
 			"require": "./dist/contract.css.cjs"
 		},
 		"./themes/dark": {
+			"./themes/light": {
+				"types": "./dist/themes/light.css.d.ts",
+				"import": "./dist/themes/light.css.js",
+				"require": "./dist/themes/light.css.cjs"
+			},
 			"types": "./dist/themes/dark.css.d.ts",
 			"import": "./dist/themes/dark.css.js",
 			"require": "./dist/themes/dark.css.cjs"
