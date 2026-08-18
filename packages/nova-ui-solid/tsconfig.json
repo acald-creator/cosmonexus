@@ -1,6 +1,8 @@
 {
 	"extends": "@cosmonexus/tsconfig/library.json",
 	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js"
 	},

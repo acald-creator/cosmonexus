@@ -3,10 +3,10 @@ language: typescript
 
 tasks:
   build:
-    command: tsdown
+    command: tsup
     inputs:
       - src/**/*
-      - tsdown.config.ts
+      - tsup.config.ts
       - package.json
     outputs:
       - dist/**/*
