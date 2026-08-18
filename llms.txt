@@ -1,0 +1,122 @@
+# cosmonexus
+
+> Monorepo for @cosmonexus packages: design tokens, reactive primitives, dual-framework UI components, and an editor framework.
+
+## Repository Structure
+
+This is a Bun workspace monorepo with Moon as the task runner. All packages are TypeScript with strict mode, built with tsup (ESM + CJS + DTS output), linted with Biome, and tested with Vitest.
+
+## Packages
+
+### @cosmonexus/design-tokens
+Framework-agnostic design token package using vanilla-extract.
+- `tokens` — createThemeContract with semantic slots (colors, fonts, spacing, radius, shadows, transitions)
+- `darkTheme` — OKLCH dark theme implementation (teal/cyan accent at hue 175)
+- Global CSS reset and base typography
+- Import: `import { tokens } from '@cosmonexus/design-tokens/contract'`
+- Import: `import { darkTheme } from '@cosmonexus/design-tokens/themes/dark'`
+
+### @cosmonexus/nova-types
+TypeScript type definitions for the reactive system. No runtime code.
+- `Signal<T>` — [getter, setter] tuple type
+- `Subscriber` — reactive subscription with dependencies and execute()
+- `Dependency` — Set<Subscriber> tracking a signal's subscribers
+- `Subscribable<T>` / `Unsubscribable` — observable subscription interface
+- `UnwrapObservable`, `UnwrapObservableLookup`, `UnwrapObservableTuple` — type-level unwrapping
+- `Dict<T>`, `RequiredBy<T, K>` — utility types
+- `Direction`, `Orientation`, `CommonProperties`, `PropTypes` — UI types
+
+### @cosmonexus/nova-store
+Reactive primitives + RxJS-based state container.
+- `createSignal<T>(value)` — creates a reactive [getter, setter] with auto-tracking
+- `createEffect(fn)` — auto-subscribing side effect that re-runs on signal changes
+- `createMemo<T>(fn)` — derived reactive computation
+- `cleanup(subscriber)` — removes subscriber from all tracked dependencies
+- `Store<T>` class — RxJS BehaviorSubject-based store with dispatch/select/subscribe
+- Dependencies: @cosmonexus/nova-types, rxjs (peer)
+
+### @cosmonexus/nova-react
+React hooks and providers binding to nova-store.
+- `useTheme<T>()` — access theme from ThemeProvider context
+- `ThemeProvider` — provides theme object via context
+- `useObservable<T>(obs$)` — subscribes to RxJS Observable, returns latest value
+- `useSubscribe<T>(obs$, callback)` — subscribes for side effects only
+- `useSnapshot<T>(options)` — BehaviorSubject-backed state with observable stream
+- `createStateMachine()` — linear state machine (INITIAL→SETUP→RUNNING→DONE)
+- `useSafeLayoutEffect` — SSR-safe useLayoutEffect
+- Dependencies: @cosmonexus/nova-store, @cosmonexus/nova-types, react (peer), rxjs (peer)
+
+### @cosmonexus/nova-ui
+React component library styled with vanilla-extract recipes.
+- `Button` — primary/secondary variants, default/small sizes, loading, fullWidth, disabled
+- `Input` — label, error state with aria-invalid, forwarded HTML attributes
+- `Alert` — success/error/warning with ARIA roles (role="alert" or role="status")
+- `StatusChip` — created/accessed/modified/deleted semantic pills
+- `Pagination` — page numbers, prev/next, ellipsis, keyboard accessible
+- `Card` — surface2 container with optional title
+- `DataTable<T>` — generic typed columns, loading skeleton, empty state, row click + keyboard
+- `Skeleton` — shimmer animation, text/row variants
+- Dependencies: @cosmonexus/design-tokens, react (peer), @vanilla-extract/css (peer), @vanilla-extract/recipes (peer)
+
+### @cosmonexus/nova-ui-solid
+Solid.js component library — same components and APIs as nova-ui but for Solid.
+- Same 8 components as nova-ui (Button, Input, Alert, StatusChip, Pagination, Card, DataTable, Skeleton)
+- Uses Solid patterns: splitProps, Accessor<T>, Show, For, createUniqueId
+- Dependencies: @cosmonexus/design-tokens, solid-js (peer), @vanilla-extract/css (peer), @vanilla-extract/recipes (peer)
+
+### @cosmonexus/cm
+CodeMirror 6 wrapper package with sub-path exports.
+- `@cosmonexus/cm/core` — re-exports from `codemirror`
+- `@cosmonexus/cm/state` — re-exports from `@codemirror/state`
+- `@cosmonexus/cm/view` — re-exports from `@codemirror/view`
+- `@cosmonexus/cm/language` — re-exports from `@codemirror/language`
+- `@cosmonexus/cm/lint` — re-exports from `@codemirror/lint`
+- `@cosmonexus/cm/langpack` — re-exports from `@codemirror/legacy-modes/mode/yaml`
+
+### @cosmonexus/stellate
+Editor extension framework built on CodeMirror.
+- `Editor` — wraps EditorView with high-level API (getContent, setContent, destroy)
+- `Extension<Options>` — base class for plugins, override extension() to provide CodeMirror extensions
+- `ExtensionManager` — registry for managing extensions by name
+- `EventEmitter<T>` — type-safe event system (on, off, emit)
+- Dependencies: @cosmonexus/cm
+
+### @cosmonexus/tsconfig
+Shared TypeScript configuration files.
+- `base.json` — strict, ES2022, bundler moduleResolution, verbatimModuleSyntax
+- `library.json` — extends base, adds composite
+- `app.json` — extends base, adds jsx: "react-jsx", noEmit
+
+## Design Token Architecture
+
+Three-layer system:
+1. **Open Props** — CSS custom properties providing raw primitive values (imported globally)
+2. **Theme Contract** (`tokens`) — semantic slots defined via `createThemeContract`
+3. **Theme Implementation** (`darkTheme`) — maps contract slots to concrete OKLCH values
+
+Components only reference the contract (`tokens.color.accent1`, `tokens.space[4]`, etc.), never raw values. Themes can be swapped by applying a different class.
+
+## Key Conventions
+
+- All colors use OKLCH for perceptual uniformity
+- Spacing scale: 0.25rem increments (space.1=0.25rem through space.10=2.5rem)
+- Focus visible: all interactive elements use `tokens.focusRing` box-shadow
+- Accessibility: WCAG 2.2 AA contrast, ARIA roles on all dynamic widgets
+- Components export both the component and its props type
+- vanilla-extract `recipe()` for variant-based components, `style()` for single-variant
+
+## File Patterns
+
+- Library packages: `packages/<name>/src/index.ts` (barrel), `tsup.config.ts`, `tsconfig.json`, `moon.yml`
+- Component packages: `packages/<name>/src/<ComponentName>/<ComponentName>.tsx` + `<ComponentName>.css.ts`
+- Build output: `packages/<name>/dist/` (ESM .js, CJS .cjs, DTS .d.ts)
+- Config: `.moon/workspace.yml`, `.moon/toolchain.yml`, `biome.json`, `vitest.workspace.ts`
+
+## Commands
+
+- `bun install` — install all workspace dependencies
+- `bun run build` — build all packages via Moon (topological order)
+- `bun run lint` — lint with Biome
+- `bun run format` — format with Biome
+- `bun run typecheck` — type check all packages
+- `bun run test` — run all tests via Moon
