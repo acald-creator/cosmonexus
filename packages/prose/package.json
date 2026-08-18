@@ -1,0 +1,36 @@
+{
+	"name": "@cosmonexus/prose",
+	"version": "0.0.1",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsup",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"prosemirror-commands": "^1.6.0",
+		"prosemirror-history": "^1.4.0",
+		"prosemirror-inputrules": "^1.4.0",
+		"prosemirror-keymap": "^1.2.0",
+		"prosemirror-model": "^1.22.0",
+		"prosemirror-schema-basic": "^1.2.0",
+		"prosemirror-schema-list": "^1.4.0",
+		"prosemirror-state": "^1.4.0",
+		"prosemirror-view": "^1.34.0"
+	},
+	"devDependencies": {
+		"@cosmonexus/tsconfig": "workspace:*"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

@@ -8,3 +8,4 @@ export { setTheme, getTheme, type Theme } from './theme/index'
 
 // Components
 export { default as CodeEditor } from './components/CodeEditor.svelte'
+export { default as RichEditor } from './components/RichEditor.svelte'

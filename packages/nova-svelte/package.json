@@ -21,6 +21,7 @@
 		"@cosmonexus/cm": "workspace:*",
 		"@cosmonexus/nova-store": "workspace:*",
 		"@cosmonexus/nova-types": "workspace:*",
+		"@cosmonexus/prose": "workspace:*",
 		"@cosmonexus/stellate": "workspace:*"
 	},
 	"peerDependencies": {
