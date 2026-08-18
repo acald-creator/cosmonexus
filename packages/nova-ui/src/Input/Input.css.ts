@@ -24,7 +24,7 @@ export const input = style({
 	transition: `border-color ${tokens.transition.fast} ${tokens.easing.out}`,
 	outline: 'none',
 	width: '100%',
-	':focus': {
+	':focus-visible': {
 		borderColor: tokens.color.accent1,
 		boxShadow: tokens.focusRing,
 	},

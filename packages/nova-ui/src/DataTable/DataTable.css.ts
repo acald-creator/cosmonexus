@@ -6,21 +6,22 @@ export const tableWrapper = style({
 	border: tokens.borderSubtle,
 	borderRadius: tokens.radius.lg,
 	overflow: 'hidden',
+	containerType: 'inline-size',
 })
 
 export const table = style({
 	width: '100%',
 	borderCollapse: 'collapse',
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'block',
 		},
 	},
 })
 
 export const thead = style({
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'none',
 		},
 	},
@@ -33,12 +34,13 @@ export const th = style({
 	color: tokens.color.text2,
 	fontFamily: tokens.font.sans,
 	textAlign: 'left',
-	padding: `${tokens.space[3]} ${tokens.space[4]}`,
+	paddingBlock: tokens.space[3],
+	paddingInline: tokens.space[4],
 })
 
 export const tbody = style({
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'block',
 		},
 	},
@@ -54,11 +56,11 @@ export const row = style({
 		outline: 'none',
 		boxShadow: tokens.focusRing,
 	},
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'block',
 			padding: tokens.space[4],
-			marginBottom: tokens.space[2],
+			marginBlockEnd: tokens.space[2],
 			borderRadius: tokens.radius.md,
 			border: tokens.borderSubtle,
 			background: tokens.color.surface2,
@@ -71,27 +73,29 @@ export const rowClickable = style({
 })
 
 export const td = style({
-	padding: `${tokens.space[3]} ${tokens.space[4]}`,
+	paddingBlock: tokens.space[3],
+	paddingInline: tokens.space[4],
 	fontSize: tokens.fontSize.base,
 	fontFamily: tokens.font.sans,
 	color: tokens.color.text1,
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'block',
-			padding: `${tokens.space[1]} 0`,
+			paddingBlock: tokens.space[1],
+			paddingInline: 0,
 		},
 	},
 })
 
 export const cellLabel = style({
 	display: 'none',
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'inline-block',
 			fontWeight: tokens.fontWeight.semibold,
 			fontSize: tokens.fontSize.sm,
 			color: tokens.color.text2,
-			marginRight: tokens.space[2],
+			marginInlineEnd: tokens.space[2],
 		},
 	},
 })
@@ -103,11 +107,11 @@ const shimmer = keyframes({
 
 export const skeletonRow = style({
 	borderBottom: tokens.borderSubtle,
-	'@media': {
-		'(max-width: 767px)': {
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'block',
 			padding: tokens.space[4],
-			marginBottom: tokens.space[2],
+			marginBlockEnd: tokens.space[2],
 			borderRadius: tokens.radius.md,
 			border: tokens.borderSubtle,
 		},
@@ -115,11 +119,13 @@ export const skeletonRow = style({
 })
 
 export const skeletonCell = style({
-	padding: `${tokens.space[3]} ${tokens.space[4]}`,
-	'@media': {
-		'(max-width: 767px)': {
+	paddingBlock: tokens.space[3],
+	paddingInline: tokens.space[4],
+	'@container': {
+		'(max-width: 600px)': {
 			display: 'block',
-			padding: `${tokens.space[1]} 0`,
+			paddingBlock: tokens.space[1],
+			paddingInline: 0,
 		},
 	},
 })
@@ -137,7 +143,8 @@ export const emptyState = style({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
-	padding: `${tokens.space[10]} ${tokens.space[4]}`,
+	paddingBlock: tokens.space[10],
+	paddingInline: tokens.space[4],
 	fontFamily: tokens.font.sans,
 	fontSize: tokens.fontSize.base,
 	color: tokens.color.text3,
