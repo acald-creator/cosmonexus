@@ -15,6 +15,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@moonrepo/cli": "2.5.1",
 		"fast-check": "3.23.2",
+		"rxjs": "^7.8.2",
 		"tsup": "^8.5.1",
 		"typescript": "5.7.3",
 		"unrun": "^0.3.1",
