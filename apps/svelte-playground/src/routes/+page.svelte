@@ -1,9 +1,22 @@
-<script lang="ts">
-	import { CodeEditor, fromObservable, fromSignal, getTheme } from '@cosmonexus/nova-svelte'
+<script>
+	import { onMount, onDestroy } from 'svelte'
+	import { writable } from 'svelte/store'
+	import { CodeEditor, fromObservable, fromSignal } from '@cosmonexus/nova-svelte'
 	import { createSignal } from '@cosmonexus/nova-store'
 	import { BehaviorSubject } from 'rxjs'
 
-	const theme = getTheme()
+	const theme = writable({
+		colors: {
+			bg: '#1a1b26',
+			surface: '#24283b',
+			text: '#c0caf5',
+			primary: '#7aa2f7',
+			secondary: '#bb9af7',
+			accent: '#7dcfff',
+			border: '#414868',
+			muted: '#565f89',
+		},
+	})
 
 	// Demo: fromSignal - a counter backed by Nova signals
 	const countSignal = createSignal(0)
@@ -13,18 +26,20 @@
 	const ticker$ = new BehaviorSubject(0)
 	const ticker = fromObservable(ticker$, 0)
 
-	let tickInterval: ReturnType<typeof setInterval> | undefined
-	$: {
-		// Start ticking on mount (client-side only)
-		if (typeof window !== 'undefined' && !tickInterval) {
-			tickInterval = setInterval(() => {
-				ticker$.next($ticker + 1)
-			}, 1000)
-		}
-	}
+	let tickInterval = $state(undefined)
+
+	onMount(() => {
+		tickInterval = setInterval(() => {
+			ticker$.next(ticker$.getValue() + 1)
+		}, 1000)
+	})
+
+	onDestroy(() => {
+		if (tickInterval) clearInterval(tickInterval)
+	})
 
 	// Demo: CodeEditor
-	let editorContent = `// Welcome to the Nova Svelte Playground!
+	let editorContent = $state(`// Welcome to the Nova Svelte Playground!
 // This editor is powered by @cosmonexus/nova-svelte + stellate + CodeMirror 6.
 
 function greet(name: string): string {
@@ -33,27 +48,25 @@ function greet(name: string): string {
 
 const result = greet('World')
 console.log(result)
-`
+`)
 
-	let charCount = editorContent.length
-	let lineCount = editorContent.split('\n').length
+	let charCount = $derived(editorContent.length)
+	let lineCount = $derived(editorContent.split('\n').length)
 
-	function handleChange(event: CustomEvent<{ content: string }>) {
+	function handleChange(event) {
 		editorContent = event.detail.content
-		charCount = editorContent.length
-		lineCount = editorContent.split('\n').length
 	}
 
 	function increment() {
-		$count = $count + 1
+		count.set($count + 1)
 	}
 
 	function decrement() {
-		$count = $count - 1
+		count.set($count - 1)
 	}
 
 	function resetCounter() {
-		$count = 0
+		count.set(0)
 	}
 </script>
 
@@ -72,8 +85,7 @@ console.log(result)
 			<div class="editor-wrapper">
 				<CodeEditor
 					content={editorContent}
-					on:change={handleChange}
-					class="demo-editor"
+					onchange={handleChange}
 				/>
 			</div>
 			<div class="editor-stats">
@@ -87,11 +99,11 @@ console.log(result)
 				<h2>fromSignal</h2>
 				<p class="description">Nova reactive signal → Svelte writable store. Two-way bound.</p>
 				<div class="counter">
-					<button on:click={decrement} aria-label="Decrement">-</button>
+					<button onclick={decrement} aria-label="Decrement">-</button>
 					<span class="counter-value">{$count}</span>
-					<button on:click={increment} aria-label="Increment">+</button>
+					<button onclick={increment} aria-label="Increment">+</button>
 				</div>
-				<button class="reset-btn" on:click={resetCounter}>Reset</button>
+				<button class="reset-btn" onclick={resetCounter}>Reset</button>
 			</div>
 
 			<div class="card">
@@ -104,8 +116,8 @@ console.log(result)
 			</div>
 
 			<div class="card">
-				<h2>Theme Context</h2>
-				<p class="description">Theme set via <code>setTheme()</code> in layout, consumed with <code>getTheme()</code>.</p>
+				<h2>Theme</h2>
+				<p class="description">Theme object with reactive Svelte store.</p>
 				<div class="color-swatches">
 					{#each Object.entries($theme.colors ?? {}) as [name, color]}
 						<div class="swatch">

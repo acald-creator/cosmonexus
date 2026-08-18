@@ -3,7 +3,7 @@
 	import { Editor } from '@cosmonexus/stellate'
 	import type { EditorConfig, EditorOptions } from '@cosmonexus/stellate'
 	import { EditorView } from '@cosmonexus/cm/view'
-	import { EditorState } from '@cosmonexus/cm/state'
+	import { EditorState, Compartment } from '@cosmonexus/cm/state'
 	import type { Extension } from '@cosmonexus/cm/state'
 
 	/** Initial document content. */
@@ -35,6 +35,7 @@
 	let container: HTMLDivElement
 	let editor: Editor | undefined
 	let view: EditorView | undefined
+	const compartment = new Compartment()
 
 	/** Get the current editor instance (for imperative access). */
 	export function getEditor(): Editor | undefined {
@@ -89,7 +90,7 @@
 
 		const state = EditorState.create({
 			doc: content,
-			extensions: buildExtensions(),
+			extensions: compartment.of(buildExtensions()),
 		})
 
 		view = new EditorView({
@@ -112,7 +113,7 @@
 	// Reactively update extensions when props change
 	$: if (view) {
 		view.dispatch({
-			effects: EditorView.reconfigure(buildExtensions()),
+			effects: compartment.reconfigure(buildExtensions()),
 		})
 	}
 
