@@ -1,74 +1,81 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
 	import Header from '$lib/components/Header.svelte'
+	import { getNovel } from '$lib/data/novels'
+	import type { NovelMeta } from '@cosmonexus/nova-types'
 
-	// Mock — will come from API
-	const novel = {
-		id: 'last-horizon',
-		title: 'The Last Horizon',
-		author: 'A. Caldwell',
-		synopsis: 'In a world where the sun is dying, one astronaut must journey beyond the edge of known space to find a new home for humanity. But the further she goes, the more she realizes that the universe has secrets far stranger than darkness.',
-		genre: 'Sci-Fi',
-		rating: 4.7,
-		totalReads: 12400,
-		chapters: [
-			{ id: 1, title: 'The Beginning', words: 4200, published: true },
-			{ id: 2, title: 'Rising Action', words: 3800, published: true },
-			{ id: 3, title: 'The Crisis', words: 2847, published: true },
-			{ id: 4, title: 'Convergence', words: 3100, published: true },
-			{ id: 5, title: 'The Descent', words: 4500, published: true },
-			{ id: 6, title: 'Revelations', words: 3900, published: true },
-			{ id: 7, title: 'Breaking Point', words: 4100, published: true },
-			{ id: 8, title: 'The Void', words: 3600, published: true },
-			{ id: 9, title: 'Echoes', words: 3200, published: true },
-			{ id: 10, title: 'Fragments', words: 4400, published: true },
-			{ id: 11, title: 'Horizon', words: 3700, published: true },
-			{ id: 12, title: 'Arrival', words: 5100, published: true },
-		]
-	}
+	const novelId = $derived($page.params.id)
+	let novel = $state<NovelMeta | null>(null)
+	let totalWords = $derived(novel?.chapters.reduce((sum, ch) => sum + ch.wordCount, 0) ?? 0)
 
-	const totalWords = novel.chapters.reduce((sum, ch) => sum + ch.words, 0)
+	onMount(() => {
+		novel = getNovel(novelId)
+	})
 </script>
 
 <Header variant="reader" />
 
-<main class="novel-page">
-	<section class="novel-header">
-		<div class="novel-cover">📖</div>
-		<div class="novel-info">
-			<span class="genre-tag">{novel.genre}</span>
-			<h1>{novel.title}</h1>
-			<p class="author">by {novel.author}</p>
-			<p class="synopsis">{novel.synopsis}</p>
-			<div class="novel-stats">
-				<span>⭐ {novel.rating}</span>
-				<span>👁 {totalReads.toLocaleString()} reads</span>
-				<span>{novel.chapters.length} chapters</span>
-				<span>{totalWords.toLocaleString()} words</span>
+{#if novel}
+	<main class="novel-page">
+		<section class="novel-header">
+			<div class="novel-cover">📖</div>
+			<div class="novel-info">
+				{#if novel.genre}
+					<span class="genre-tag">{novel.genre}</span>
+				{/if}
+				<h1>{novel.title}</h1>
+				<p class="author">by {novel.author}</p>
+				{#if novel.synopsis}
+					<p class="synopsis">{novel.synopsis}</p>
+				{/if}
+				<div class="novel-stats">
+					<span>{novel.chapters.length} chapters</span>
+					<span>{totalWords.toLocaleString()} words</span>
+				</div>
+				{#if novel.chapters.length > 0}
+					<a href="/novel/{novel.id}/{novel.chapters[0].order}" class="start-btn">Start Reading</a>
+				{/if}
 			</div>
-			<a href="/novel/{novel.id}/1" class="start-btn">Start Reading</a>
-		</div>
-	</section>
+		</section>
 
-	<section class="chapters-section">
-		<h2>Chapters</h2>
-		<div class="chapter-list">
-			{#each novel.chapters as chapter}
-				<a href="/novel/{novel.id}/{chapter.id}" class="chapter-row">
-					<span class="chapter-num">{chapter.id}</span>
-					<span class="chapter-title">{chapter.title}</span>
-					<span class="chapter-words">{chapter.words.toLocaleString()}w</span>
-				</a>
-			{/each}
-		</div>
-	</section>
-</main>
+		<section class="chapters-section">
+			<h2>Chapters</h2>
+			<div class="chapter-list">
+				{#each novel.chapters as chapter}
+					{#if chapter.status === 'final' || chapter.status === 'editing'}
+						<a href="/novel/{novel.id}/{chapter.order}" class="chapter-row">
+							<span class="chapter-num">{chapter.order}</span>
+							<span class="chapter-title">{chapter.title}</span>
+							<span class="chapter-words">{chapter.wordCount.toLocaleString()}w</span>
+						</a>
+					{/if}
+				{/each}
+			</div>
+		</section>
+	</main>
+{:else}
+	<main class="novel-page">
+		<p class="not-found">Novel not found. <a href="/">← Back to library</a></p>
+	</main>
+{/if}
 
 <style>
 	.novel-page {
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 2rem;
+	}
+
+	.not-found {
+		color: var(--muted);
+		text-align: center;
+		padding: 4rem 0;
+	}
+
+	.not-found a {
+		color: var(--primary);
+		text-decoration: none;
 	}
 
 	.novel-header {

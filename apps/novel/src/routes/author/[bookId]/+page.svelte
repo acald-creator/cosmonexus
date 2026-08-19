@@ -1,111 +1,120 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
+	import { goto } from '$app/navigation'
 	import Header from '$lib/components/Header.svelte'
 	import ProgressBar from '$lib/components/ProgressBar.svelte'
+	import { getNovel } from '$lib/data/novels'
+	import { createChapter } from '$lib/data/chapters'
+	import type { NovelMeta } from '@cosmonexus/nova-types'
 
 	const bookId = $derived($page.params.bookId)
+	let novel = $state<NovelMeta | null>(null)
+	let totalWords = $derived(novel?.chapters.reduce((sum, ch) => sum + ch.wordCount, 0) ?? 0)
 
-	// Mock
-	const book = {
-		id: 'last-horizon',
-		title: 'The Last Horizon',
-		genre: 'Sci-Fi',
-		targetWordCount: 80000,
-		chapters: [
-			{ id: 1, title: 'The Beginning', words: 4200, status: 'final' },
-			{ id: 2, title: 'Rising Action', words: 3800, status: 'final' },
-			{ id: 3, title: 'The Crisis', words: 2847, status: 'draft' },
-			{ id: 4, title: 'Convergence', words: 3100, status: 'revision' },
-			{ id: 5, title: 'The Descent', words: 4500, status: 'final' },
-			{ id: 6, title: 'Revelations', words: 3900, status: 'final' },
-			{ id: 7, title: 'Breaking Point', words: 4100, status: 'final' },
-			{ id: 8, title: 'The Void', words: 3600, status: 'editing' },
-			{ id: 9, title: 'Echoes', words: 3200, status: 'final' },
-			{ id: 10, title: 'Fragments', words: 4400, status: 'final' },
-			{ id: 11, title: 'Horizon', words: 3700, status: 'final' },
-			{ id: 12, title: 'Arrival', words: 5100, status: 'final' },
-		],
+	onMount(() => {
+		novel = getNovel(bookId)
+	})
+
+	function addChapter() {
+		if (!novel) return
+		const title = prompt('Chapter title:')
+		if (!title) return
+		const ch = createChapter(bookId, { title, targetWordCount: 4000 })
+		if (ch) {
+			novel = getNovel(bookId) // refresh
+		}
 	}
-
-	const totalWords = $derived(book.chapters.reduce((sum, ch) => sum + ch.words, 0))
-	const analytics = { reads: 12400, rating: 4.7, comments: 89 }
 </script>
 
 <Header variant="author" />
 
-<main class="book-page">
-	<div class="book-header">
-		<div>
-			<span class="genre-tag">{book.genre}</span>
-			<h1>{book.title}</h1>
+{#if novel}
+	<main class="book-page">
+		<div class="book-header">
+			<div>
+				{#if novel.genre}
+					<span class="genre-tag">{novel.genre}</span>
+				{/if}
+				<h1>{novel.title}</h1>
+			</div>
+			{#if novel.chapters.length > 0}
+				<a href="/author/{bookId}/write/{novel.chapters[0].id}" class="write-btn">Continue Writing</a>
+			{/if}
 		</div>
-		<a href="/author/{bookId}/write/{book.chapters[0]?.id}" class="write-btn">Continue Writing</a>
-	</div>
 
-	<div class="stats-row">
-		<div class="stat-card">
-			<span class="stat-value">{totalWords.toLocaleString()}</span>
-			<span class="stat-label">Words</span>
+		<div class="stats-row">
+			<div class="stat-card">
+				<span class="stat-value">{totalWords.toLocaleString()}</span>
+				<span class="stat-label">Words</span>
+			</div>
+			<div class="stat-card">
+				<span class="stat-value">{novel.chapters.length}</span>
+				<span class="stat-label">Chapters</span>
+			</div>
 		</div>
-		<div class="stat-card">
-			<span class="stat-value">{book.chapters.length}</span>
-			<span class="stat-label">Chapters</span>
-		</div>
-		<div class="stat-card">
-			<span class="stat-value">👁 {analytics.reads.toLocaleString()}</span>
-			<span class="stat-label">Reads</span>
-		</div>
-		<div class="stat-card">
-			<span class="stat-value">⭐ {analytics.rating}</span>
-			<span class="stat-label">Rating</span>
-		</div>
-		<div class="stat-card">
-			<span class="stat-value">💬 {analytics.comments}</span>
-			<span class="stat-label">Comments</span>
-		</div>
-	</div>
 
-	<div class="progress-section">
-		<ProgressBar current={totalWords} target={book.targetWordCount} label="Novel Progress" />
-	</div>
+		{#if novel.targetWordCount}
+			<div class="progress-section">
+				<ProgressBar current={totalWords} target={novel.targetWordCount} label="Novel Progress" />
+			</div>
+		{/if}
 
-	<section class="chapters-section">
-		<div class="chapters-header">
-			<h2>Chapters</h2>
-			<button class="add-chapter-btn">+ Add Chapter</button>
-		</div>
-		<table class="chapters-table">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Title</th>
-					<th>Words</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each book.chapters as chapter}
-					<tr>
-						<td class="col-num">{chapter.id}</td>
-						<td class="col-title">{chapter.title}</td>
-						<td class="col-words">{chapter.words.toLocaleString()}</td>
-						<td><span class="status-badge {chapter.status}">{chapter.status}</span></td>
-						<td class="col-actions">
-							<a href="/author/{bookId}/write/{chapter.id}" class="edit-link">Edit</a>
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</section>
-</main>
+		<section class="chapters-section">
+			<div class="chapters-header">
+				<h2>Chapters</h2>
+				<button class="add-chapter-btn" onclick={addChapter}>+ Add Chapter</button>
+			</div>
+			{#if novel.chapters.length === 0}
+				<p class="empty">No chapters yet. Click "+ Add Chapter" to start writing.</p>
+			{:else}
+				<table class="chapters-table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Title</th>
+							<th>Words</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each novel.chapters as chapter}
+							<tr>
+								<td class="col-num">{chapter.order}</td>
+								<td class="col-title">{chapter.title}</td>
+								<td class="col-words">{chapter.wordCount.toLocaleString()}</td>
+								<td><span class="status-badge {chapter.status}">{chapter.status}</span></td>
+								<td class="col-actions">
+									<a href="/author/{bookId}/write/{chapter.id}" class="edit-link">Edit</a>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			{/if}
+		</section>
+	</main>
+{:else}
+	<main class="book-page">
+		<p class="not-found">Book not found. <a href="/author">← Back to dashboard</a></p>
+	</main>
+{/if}
 
 <style>
 	.book-page {
 		max-width: 900px;
 		margin: 0 auto;
 		padding: 2rem;
+	}
+
+	.not-found, .empty {
+		color: var(--muted);
+	}
+
+	.not-found a {
+		color: var(--primary);
+		text-decoration: none;
 	}
 
 	.book-header {

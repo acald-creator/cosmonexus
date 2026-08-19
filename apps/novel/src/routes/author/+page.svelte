@@ -1,61 +1,76 @@
-<script>
+<script lang="ts">
+	import { onMount } from 'svelte'
 	import Header from '$lib/components/Header.svelte'
 	import Sidebar from '$lib/components/Sidebar.svelte'
+	import { listNovels, getNovelWordCount } from '$lib/data/novels'
+	import type { NovelMeta } from '@cosmonexus/nova-types'
 
-	const books = [
-		{ id: 'last-horizon', title: 'The Last Horizon', chapters: Array(12).fill(null) },
-		{ id: 'ember-falls', title: 'Ember Falls', chapters: Array(8).fill(null) },
-	]
+	let novels = $state<NovelMeta[]>([])
+	let totalWords = $derived(novels.reduce((sum, n) => sum + n.chapters.reduce((s, ch) => s + ch.wordCount, 0), 0))
 
-	const recentChapters = [
-		{ bookId: 'last-horizon', bookTitle: 'The Last Horizon', id: 3, title: 'The Crisis', status: 'draft', words: 2847 },
-		{ bookId: 'last-horizon', bookTitle: 'The Last Horizon', id: 12, title: 'Arrival', status: 'final', words: 5100 },
-		{ bookId: 'ember-falls', bookTitle: 'Ember Falls', id: 8, title: 'The Forge', status: 'revision', words: 3200 },
-	]
+	onMount(() => {
+		novels = listNovels()
+	})
+
+	// Collect recent chapters across all books
+	const recentChapters = $derived(
+		novels
+			.flatMap((n) => n.chapters.map((ch) => ({ ...ch, bookId: n.id, bookTitle: n.title })))
+			.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+			.slice(0, 5)
+	)
 </script>
 
 <Header variant="author" />
 
 <div class="layout">
-	<Sidebar {books} totalWords={48400} targetWords={80000} streak={7} todayWords={1204} />
+	<Sidebar books={novels} totalWords={totalWords} targetWords={80000} streak={7} todayWords={0} />
 
 	<main class="content">
 		<section class="welcome">
 			<h1>Welcome back 👋</h1>
-			<p class="subtitle">You've written <strong>1,204 words</strong> today. Keep it going!</p>
+			<p class="subtitle">You have <strong>{novels.length} book{novels.length !== 1 ? 's' : ''}</strong> with <strong>{totalWords.toLocaleString()} words</strong> written.</p>
 		</section>
 
 		<section class="section">
 			<h2>Recent Chapters</h2>
-			<div class="chapter-list">
-				{#each recentChapters as chapter}
-					<a href="/author/{chapter.bookId}/write/{chapter.id}" class="chapter-card">
-						<div class="chapter-info">
-							<span class="chapter-book">{chapter.bookTitle}</span>
-							<span class="chapter-title">Ch {chapter.id}: {chapter.title}</span>
-						</div>
-						<div class="chapter-right">
-							<span class="status-badge {chapter.status}">{chapter.status}</span>
-							<span class="chapter-words">{chapter.words.toLocaleString()}w</span>
-						</div>
-					</a>
-				{/each}
-			</div>
+			{#if recentChapters.length === 0}
+				<p class="empty">No chapters yet. Create a book to get started.</p>
+			{:else}
+				<div class="chapter-list">
+					{#each recentChapters as chapter}
+						<a href="/author/{chapter.bookId}/write/{chapter.id}" class="chapter-card">
+							<div class="chapter-info">
+								<span class="chapter-book">{chapter.bookTitle}</span>
+								<span class="chapter-title">Ch {chapter.order}: {chapter.title}</span>
+							</div>
+							<div class="chapter-right">
+								<span class="status-badge {chapter.status}">{chapter.status}</span>
+								<span class="chapter-words">{chapter.wordCount.toLocaleString()}w</span>
+							</div>
+						</a>
+					{/each}
+				</div>
+			{/if}
 		</section>
 
 		<section class="section">
 			<h2>Quick Actions</h2>
 			<div class="actions-grid">
-				<a href="/author/last-horizon/write/3" class="action-card">
-					<span class="action-icon">✏️</span>
-					<span>Continue Writing</span>
-					<span class="action-detail">Ch 3: The Crisis</span>
-				</a>
-				<a href="/author/last-horizon" class="action-card">
-					<span class="action-icon">📊</span>
-					<span>Manage Book</span>
-					<span class="action-detail">The Last Horizon</span>
-				</a>
+				{#if recentChapters.length > 0}
+					<a href="/author/{recentChapters[0].bookId}/write/{recentChapters[0].id}" class="action-card">
+						<span class="action-icon">✏️</span>
+						<span>Continue Writing</span>
+						<span class="action-detail">Ch {recentChapters[0].order}: {recentChapters[0].title}</span>
+					</a>
+				{/if}
+				{#if novels.length > 0}
+					<a href="/author/{novels[0].id}" class="action-card">
+						<span class="action-icon">📊</span>
+						<span>Manage Book</span>
+						<span class="action-detail">{novels[0].title}</span>
+					</a>
+				{/if}
 				<a href="/author/new" class="action-card">
 					<span class="action-icon">📖</span>
 					<span>New Book</span>
@@ -79,10 +94,6 @@
 		overflow-y: auto;
 	}
 
-	.welcome {
-		margin-bottom: 2rem;
-	}
-
 	.welcome h1 {
 		font-size: 1.5rem;
 		font-weight: 700;
@@ -98,13 +109,18 @@
 	}
 
 	.section {
-		margin-bottom: 2.5rem;
+		margin-top: 2.5rem;
 	}
 
 	.section h2 {
 		font-size: 1rem;
 		font-weight: 600;
 		margin-bottom: 1rem;
+	}
+
+	.empty {
+		color: var(--muted);
+		font-size: 0.9rem;
 	}
 
 	.chapter-list {

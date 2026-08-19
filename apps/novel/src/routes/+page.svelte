@@ -1,20 +1,16 @@
-<script>
+<script lang="ts">
+	import { onMount } from 'svelte'
 	import Header from '$lib/components/Header.svelte'
+	import { listNovels, getNovelWordCount } from '$lib/data/novels'
+	import type { NovelMeta } from '@cosmonexus/nova-types'
 
-	// Mock data — will come from API later
-	const trending = [
-		{ id: 'last-horizon', title: 'The Last Horizon', author: 'A. Caldwell', genre: 'Sci-Fi', chapters: 12, rating: 4.7 },
-		{ id: 'ember-falls', title: 'Ember Falls', author: 'M. Torres', genre: 'Fantasy', chapters: 8, rating: 4.9 },
-		{ id: 'midnight-garden', title: 'Midnight Garden', author: 'S. Park', genre: 'Mystery', chapters: 20, rating: 4.5 },
-		{ id: 'iron-tide', title: 'The Iron Tide', author: 'J. Chen', genre: 'Thriller', chapters: 15, rating: 4.6 },
-	]
+	let novels = $state<NovelMeta[]>([])
+
+	onMount(() => {
+		novels = listNovels()
+	})
 
 	const genres = ['Sci-Fi', 'Fantasy', 'Romance', 'Mystery', 'Thriller', 'Literary', 'Horror']
-
-	const recentUpdates = [
-		{ novelId: 'last-horizon', title: 'The Last Horizon', chapter: 12, chapterTitle: 'Arrival', author: 'A. Caldwell', timeAgo: '2h ago', reads: 340 },
-		{ novelId: 'ember-falls', title: 'Ember Falls', chapter: 8, chapterTitle: 'The Forge', author: 'M. Torres', timeAgo: '5h ago', reads: 210 },
-	]
 </script>
 
 <Header variant="reader" />
@@ -27,29 +23,34 @@
 
 	<section class="section">
 		<h2 class="section-title">Trending Now</h2>
-		<div class="book-grid">
-			{#each trending as book}
-				<a href="/novel/{book.id}" class="book-card">
-					<div class="book-cover">
-						<span class="cover-emoji">📖</span>
-					</div>
-					<h3 class="book-title">{book.title}</h3>
-					<p class="book-author">by {book.author}</p>
-					<div class="book-meta">
-						<span>⭐ {book.rating}</span>
-						<span>{book.chapters} ch</span>
-						<span class="genre-tag">{book.genre}</span>
-					</div>
-				</a>
-			{/each}
-		</div>
+		{#if novels.length === 0}
+			<p class="empty">No novels yet. <a href="/author">Start writing!</a></p>
+		{:else}
+			<div class="book-grid">
+				{#each novels as book}
+					<a href="/novel/{book.id}" class="book-card">
+						<div class="book-cover">
+							<span class="cover-emoji">📖</span>
+						</div>
+						<h3 class="book-title">{book.title}</h3>
+						<p class="book-author">by {book.author}</p>
+						<div class="book-meta">
+							<span>{book.chapters.length} ch</span>
+							{#if book.genre}
+								<span class="genre-tag">{book.genre}</span>
+							{/if}
+						</div>
+					</a>
+				{/each}
+			</div>
+		{/if}
 	</section>
 
 	<section class="section">
 		<h2 class="section-title">Genres</h2>
 		<div class="genre-list">
 			{#each genres as genre}
-				<a href="/?genre={genre.toLowerCase()}" class="genre-pill">{genre}</a>
+				<button class="genre-pill">{genre}</button>
 			{/each}
 		</div>
 	</section>
@@ -57,13 +58,16 @@
 	<section class="section">
 		<h2 class="section-title">Recently Updated</h2>
 		<div class="updates-list">
-			{#each recentUpdates as update}
-				<a href="/novel/{update.novelId}/{update.chapter}" class="update-card">
-					<div class="update-info">
-						<span class="update-title">📖 {update.title} · Ch {update.chapter} "{update.chapterTitle}"</span>
-						<span class="update-meta">by {update.author} · {update.timeAgo} · 👁 {update.reads} reads</span>
-					</div>
-				</a>
+			{#each novels.slice(0, 5) as novel}
+				{@const lastChapter = novel.chapters[novel.chapters.length - 1]}
+				{#if lastChapter}
+					<a href="/novel/{novel.id}/{lastChapter.order}" class="update-card">
+						<div class="update-info">
+							<span class="update-title">📖 {novel.title} · Ch {lastChapter.order} "{lastChapter.title}"</span>
+							<span class="update-meta">by {novel.author}</span>
+						</div>
+					</a>
+				{/if}
 			{/each}
 		</div>
 	</section>
@@ -101,6 +105,15 @@
 		font-weight: 600;
 		margin-bottom: 1rem;
 		color: var(--text-dim);
+	}
+
+	.empty {
+		color: var(--muted);
+	}
+
+	.empty a {
+		color: var(--primary);
+		text-decoration: none;
 	}
 
 	.book-grid {
@@ -171,9 +184,10 @@
 		padding: 0.4rem 1rem;
 		border-radius: 20px;
 		border: 1px solid var(--border);
-		text-decoration: none;
+		background: transparent;
 		font-size: 0.85rem;
 		color: var(--text-dim);
+		cursor: pointer;
 		transition: all 0.15s;
 	}
 

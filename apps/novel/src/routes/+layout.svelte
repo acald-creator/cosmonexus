@@ -1,5 +1,14 @@
 <script>
+	import { onMount } from 'svelte'
+	import { seed, isSeeded } from '$lib/data/seed'
+
 	let { children } = $props()
+
+	onMount(() => {
+		if (!isSeeded()) {
+			seed()
+		}
+	})
 </script>
 
 <div class="app">

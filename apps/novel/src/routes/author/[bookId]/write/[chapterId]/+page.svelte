@@ -1,39 +1,51 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
 	import { RichEditor } from '@cosmonexus/nova-svelte'
+	import { getNovel } from '$lib/data/novels'
+	import { getChapterMeta, getChapterContent, saveChapterContent } from '$lib/data/chapters'
+	import type { ChapterMeta, DocumentJSON } from '@cosmonexus/nova-types'
 
 	const bookId = $derived($page.params.bookId)
 	const chapterId = $derived($page.params.chapterId)
 
+	let chapterMeta = $state<ChapterMeta | null>(null)
+	let initialContent = $state<DocumentJSON | undefined>(undefined)
 	let wordCount = $state({ words: 0, characters: 0 })
 	let lastSaved = $state('')
 	let isFocused = $state(false)
-	let editorRef = $state(undefined)
-
-	// Mock
-	const chapter = {
-		title: 'The Crisis',
-		status: 'draft',
-		targetWords: 4000,
-	}
+	let editorRef = $state<any>(undefined)
+	let novelTitle = $state('')
 
 	let percentage = $derived(
-		chapter.targetWords > 0 ? Math.min(100, Math.round((wordCount.words / chapter.targetWords) * 100)) : 0
+		chapterMeta?.targetWordCount
+			? Math.min(100, Math.round((wordCount.words / chapterMeta.targetWordCount) * 100))
+			: 0
 	)
 
-	function handleUpdate(event) {
+	onMount(() => {
+		const novel = getNovel(bookId)
+		if (novel) novelTitle = novel.title
+
+		chapterMeta = getChapterMeta(bookId, chapterId)
+		const content = getChapterContent(bookId, chapterId)
+		if (content) {
+			initialContent = content
+		}
+	})
+
+	function handleUpdate(event: any) {
 		wordCount = event.detail.wordCount
 	}
 
-	function handleReady(event) {
+	function handleReady(event: any) {
 		editorRef = event.detail.editor
 	}
 
 	function save() {
 		if (!editorRef) return
 		const json = editorRef.getJSON()
-		localStorage.setItem(`chapter-${bookId}-${chapterId}`, JSON.stringify(json))
+		saveChapterContent(bookId, chapterId, json, wordCount.words)
 		lastSaved = new Date().toLocaleTimeString()
 	}
 
@@ -46,12 +58,13 @@
 <header class="editor-header">
 	<div class="header-left">
 		<a href="/author/{bookId}" class="back-link">← Back</a>
-		<span class="chapter-info">Ch {chapterId}: {chapter.title}</span>
-		<span class="status-badge {chapter.status}">{chapter.status}</span>
+		{#if chapterMeta}
+			<span class="chapter-info">Ch {chapterMeta.order}: {chapterMeta.title}</span>
+			<span class="status-badge {chapterMeta.status}">{chapterMeta.status}</span>
+		{/if}
 	</div>
 	<div class="header-right">
 		<button onclick={save} class="save-btn">Save</button>
-		<button class="publish-btn">Publish ▼</button>
 	</div>
 </header>
 
@@ -66,22 +79,27 @@
 </div>
 
 <main class="editor-area" class:focused={isFocused}>
-	<RichEditor
-		placeholder="Begin writing..."
-		on:update={handleUpdate}
-		on:focus={() => isFocused = true}
-		on:blur={() => isFocused = false}
-		on:ready={handleReady}
-	/>
+	{#if initialContent !== undefined || chapterMeta}
+		<RichEditor
+			content={initialContent}
+			placeholder="Begin writing..."
+			on:update={handleUpdate}
+			on:focus={() => isFocused = true}
+			on:blur={() => isFocused = false}
+			on:ready={handleReady}
+		/>
+	{/if}
 </main>
 
 <footer class="editor-footer">
 	<div class="footer-left">
-		<span>{wordCount.words.toLocaleString()} / {chapter.targetWords.toLocaleString()} words</span>
-		<div class="mini-progress">
-			<div class="mini-fill" style:width="{percentage}%"></div>
-		</div>
-		<span class="percent">{percentage}%</span>
+		<span>{wordCount.words.toLocaleString()}{chapterMeta?.targetWordCount ? ` / ${chapterMeta.targetWordCount.toLocaleString()}` : ''} words</span>
+		{#if chapterMeta?.targetWordCount}
+			<div class="mini-progress">
+				<div class="mini-fill" style:width="{percentage}%"></div>
+			</div>
+			<span class="percent">{percentage}%</span>
+		{/if}
 	</div>
 	<div class="footer-right">
 		{#if lastSaved}
@@ -136,7 +154,7 @@
 		gap: 0.5rem;
 	}
 
-	.save-btn, .publish-btn {
+	.save-btn {
 		padding: 0.4rem 0.9rem;
 		border-radius: 6px;
 		border: 1px solid var(--border);
@@ -150,17 +168,6 @@
 	.save-btn:hover {
 		border-color: var(--primary);
 		color: var(--primary);
-	}
-
-	.publish-btn {
-		background: var(--primary);
-		border-color: var(--primary);
-		color: var(--bg);
-		font-weight: 600;
-	}
-
-	.publish-btn:hover {
-		opacity: 0.9;
 	}
 
 	.toolbar {
