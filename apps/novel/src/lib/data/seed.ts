@@ -26,6 +26,7 @@ export function seed(): void {
 	const novel: NovelMeta = {
 		id: novelId,
 		title: 'The Last Horizon',
+		coverUrl: 'https://picsum.photos/seed/last-horizon/400/600',
 		author: 'A. Caldwell',
 		genre: 'Sci-Fi',
 		synopsis: 'In a world where the sun is dying, one astronaut must journey beyond the edge of known space to find a new home for humanity. But the further she goes, the more she realizes that the universe has secrets far stranger than darkness.',

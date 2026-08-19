@@ -10,6 +10,8 @@
 		novels = listNovels()
 	})
 
+	const featured = $derived(novels[0] ?? null)
+	const rest = $derived(novels.slice(1))
 	const genres = ['Sci-Fi', 'Fantasy', 'Romance', 'Mystery', 'Thriller', 'Literary']
 </script>
 
@@ -24,48 +26,65 @@
 	{#if novels.length === 0}
 		<p class="empty">Nothing here yet. <a href="/author">Start writing</a></p>
 	{:else}
-		<section class="section">
-			<h2 class="section-heading">Now Reading</h2>
-			<div class="novel-list">
-				{#each novels as book}
-					<a href="/novel/{book.id}" class="novel-entry">
-						<div class="novel-entry-meta">
-							{#if book.genre}
-								<span class="genre">{book.genre}</span>
-							{/if}
-							<span class="chapter-count">{book.chapters.length} chapters</span>
-						</div>
-						<h3 class="novel-entry-title">{book.title}</h3>
-						<p class="novel-entry-author">by {book.author}</p>
-						{#if book.synopsis}
-							<p class="novel-entry-synopsis">{book.synopsis}</p>
+		<!-- Featured Novel (cover-forward) -->
+		{#if featured}
+			<section class="featured">
+				<a href="/novel/{featured.id}" class="featured-card">
+					<div class="featured-cover">
+						{#if featured.coverUrl}
+							<img src={featured.coverUrl} alt="{featured.title} cover" />
+						{:else}
+							<div class="cover-placeholder">
+								<span>{featured.title.charAt(0)}</span>
+							</div>
 						{/if}
-					</a>
-				{/each}
-			</div>
-		</section>
+					</div>
+					<div class="featured-info">
+						{#if featured.genre}
+							<span class="genre">{featured.genre}</span>
+						{/if}
+						<h2 class="featured-title">{featured.title}</h2>
+						<p class="featured-author">by {featured.author}</p>
+						{#if featured.synopsis}
+							<p class="featured-synopsis">{featured.synopsis}</p>
+						{/if}
+						<span class="featured-meta">{featured.chapters.length} chapters · {featured.chapters.reduce((s, c) => s + c.wordCount, 0).toLocaleString()} words</span>
+					</div>
+				</a>
+			</section>
+		{/if}
 
+		<!-- More Novels (list with thumbnail) -->
+		{#if rest.length > 0}
+			<section class="section">
+				<h2 class="section-heading">More to Read</h2>
+				<div class="novel-list">
+					{#each rest as book}
+						<a href="/novel/{book.id}" class="novel-row">
+							<div class="novel-thumb">
+								{#if book.coverUrl}
+									<img src={book.coverUrl} alt="" />
+								{:else}
+									<div class="thumb-placeholder">{book.title.charAt(0)}</div>
+								{/if}
+							</div>
+							<div class="novel-row-info">
+								<h3>{book.title}</h3>
+								<span class="novel-row-author">{book.author}</span>
+							</div>
+							<span class="novel-row-meta">{book.chapters.length} ch</span>
+						</a>
+					{/each}
+				</div>
+			</section>
+		{/if}
+
+		<!-- Genres -->
 		<section class="section">
 			<h2 class="section-heading">Browse by Genre</h2>
 			<div class="genre-row">
 				{#each genres as genre}
 					<button class="genre-chip">{genre}</button>
-				{/each}
-			</div>
-		</section>
-
-		<section class="section">
-			<h2 class="section-heading">Latest Updates</h2>
-			<div class="updates">
-				{#each novels.slice(0, 5) as novel}
-					{@const lastChapter = novel.chapters[novel.chapters.length - 1]}
-					{#if lastChapter}
-						<a href="/novel/{novel.id}/{lastChapter.order}" class="update-row">
-							<span class="update-novel">{novel.title}</span>
-							<span class="update-chapter">Ch {lastChapter.order}: {lastChapter.title}</span>
-							<span class="update-author">{novel.author}</span>
-						</a>
-					{/if}
 				{/each}
 			</div>
 		</section>
@@ -82,8 +101,7 @@
 
 	/* ─── Hero ─── */
 	.hero {
-		padding-block-end: var(--space-section);
-		border-block-end: 1px solid var(--border-light);
+		padding-block-end: var(--space-block);
 		margin-block-end: var(--space-section);
 	}
 
@@ -92,29 +110,14 @@
 		font-size: clamp(var(--font-size-3xl), 5vw, var(--font-size-5xl));
 		font-weight: var(--font-weight-extrabold);
 		letter-spacing: -0.03em;
-		line-height: var(--leading-tight);
-		margin-block-end: var(--spacing-3);
+		line-height: var(--leading-tight, 1.2);
+		margin-block-end: var(--spacing-2);
 	}
 
 	.hero p {
 		font-size: var(--font-size-lg);
 		color: var(--text-muted);
-		max-width: var(--measure-narrow);
-	}
-
-	/* ─── Sections ─── */
-	.section {
-		margin-block-end: var(--space-section);
-	}
-
-	.section-heading {
-		font-family: var(--font-ui);
-		font-size: var(--font-size-xs);
-		font-weight: var(--font-weight-semibold);
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--text-muted);
-		margin-block-end: var(--space-block);
+		max-width: var(--measure-narrow, 45ch);
 	}
 
 	.empty {
@@ -123,67 +126,177 @@
 		padding-block: var(--space-section);
 	}
 
-	/* ─── Novel List (editorial, not cards) ─── */
+	/* ─── Featured Novel ─── */
+	.featured {
+		margin-block-end: var(--space-section);
+		padding-block-end: var(--space-section);
+		border-block-end: 1px solid var(--border-light);
+	}
+
+	.featured-card {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: var(--spacing-8);
+		align-items: start;
+		text-decoration: none;
+		transition: opacity var(--motion-micro);
+	}
+
+	.featured-card:hover {
+		opacity: 0.9;
+	}
+
+	.featured-cover {
+		width: clamp(120px, 18vw, 180px);
+		aspect-ratio: 2 / 3;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		box-shadow: var(--shadow-md);
+	}
+
+	.featured-cover img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.cover-placeholder {
+		width: 100%;
+		height: 100%;
+		background: var(--background-elevated);
+		display: grid;
+		place-items: center;
+		font-family: var(--font-display);
+		font-size: var(--font-size-4xl);
+		font-weight: var(--font-weight-extrabold);
+		color: var(--text-muted);
+		opacity: 0.4;
+	}
+
+	.featured-info {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-1);
+		padding-block-start: var(--spacing-2);
+	}
+
+	.genre {
+		font-size: var(--font-size-xs);
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--color-accent-main);
+	}
+
+	.featured-title {
+		font-family: var(--font-display);
+		font-size: var(--font-size-3xl);
+		font-weight: var(--font-weight-bold);
+		line-height: var(--leading-tight, 1.2);
+		letter-spacing: -0.02em;
+		color: var(--text-primary);
+	}
+
+	.featured-author {
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
+	}
+
+	.featured-synopsis {
+		font-size: var(--font-size-sm);
+		line-height: var(--line-height-relaxed);
+		color: var(--text-secondary);
+		margin-block-start: var(--spacing-2);
+		max-width: var(--measure);
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.featured-meta {
+		font-size: var(--font-size-xs);
+		font-family: var(--font-mono);
+		color: var(--text-muted);
+		margin-block-start: var(--spacing-3);
+	}
+
+	/* ─── Novel List (with thumbnail) ─── */
+	.section {
+		margin-block-end: var(--space-section);
+	}
+
+	.section-heading {
+		font-family: var(--font-ui, var(--font-family-sans));
+		font-size: var(--font-size-xs);
+		font-weight: var(--font-weight-semibold);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--text-muted);
+		margin-block-end: var(--spacing-6);
+	}
+
 	.novel-list {
 		display: flex;
 		flex-direction: column;
 	}
 
-	.novel-entry {
-		display: block;
-		padding-block: var(--space-block);
+	.novel-row {
+		display: grid;
+		grid-template-columns: 48px 1fr auto;
+		gap: var(--spacing-4);
+		align-items: center;
+		padding-block: var(--spacing-3);
 		border-block-end: 1px solid var(--border-light);
 		text-decoration: none;
-		transition: transform var(--motion-state);
+		transition: transform var(--motion-micro);
 	}
 
-	.novel-entry:first-child {
-		padding-block-start: 0;
+	.novel-row:hover {
+		transform: translateX(var(--spacing-1));
 	}
 
-	.novel-entry:hover {
-		transform: translateX(var(--spacing-3));
+	.novel-thumb {
+		width: 48px;
+		aspect-ratio: 2 / 3;
+		border-radius: var(--radius-sm);
+		overflow: hidden;
+		background: var(--background-muted);
 	}
 
-	.novel-entry-meta {
-		display: flex;
-		gap: var(--spacing-3);
+	.novel-thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.thumb-placeholder {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		place-items: center;
+		font-family: var(--font-display);
+		font-weight: var(--font-weight-bold);
+		color: var(--text-muted);
+		font-size: var(--font-size-sm);
+	}
+
+	.novel-row-info h3 {
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-medium);
+		color: var(--text-primary);
+		line-height: var(--line-height-tight);
+	}
+
+	.novel-row-author {
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
+	}
+
+	.novel-row-meta {
 		font-size: var(--font-size-xs);
 		font-family: var(--font-mono);
 		color: var(--text-muted);
-		margin-block-end: var(--spacing-2);
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-	}
-
-	.genre {
-		color: var(--color-accent-main);
-	}
-
-	.novel-entry-title {
-		font-family: var(--font-display);
-		font-size: var(--font-size-2xl);
-		font-weight: var(--font-weight-bold);
-		line-height: var(--leading-tight);
-		color: var(--text-primary);
-		margin-block-end: var(--spacing-1);
-	}
-
-	.novel-entry-author {
-		font-size: var(--font-size-sm);
-		color: var(--text-muted);
-		margin-block-end: var(--spacing-2);
-	}
-
-	.novel-entry-synopsis {
-		font-size: var(--font-size-sm);
-		color: var(--text-secondary);
-		line-height: var(--line-height-relaxed);
-		max-width: var(--measure);
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
 	}
 
 	/* ─── Genres ─── */
@@ -201,7 +314,7 @@
 		font-size: var(--font-size-sm);
 		color: var(--text-secondary);
 		cursor: pointer;
-		transition: border-color var(--motion-micro), color var(--motion-micro), background-color var(--motion-micro);
+		transition: border-color var(--motion-micro), color var(--motion-micro);
 	}
 
 	.genre-chip:hover {
@@ -212,42 +325,5 @@
 	.genre-chip:focus-visible {
 		outline: 2px solid var(--focus-ring, var(--color-accent-main));
 		outline-offset: 2px;
-	}
-
-	/* ─── Updates ─── */
-	.updates {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.update-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr auto;
-		gap: var(--spacing-4);
-		align-items: baseline;
-		padding-block: var(--spacing-3);
-		border-block-end: 1px solid var(--border-light);
-		text-decoration: none;
-		font-size: var(--font-size-sm);
-		transition: transform var(--motion-micro);
-	}
-
-	.update-row:hover {
-		transform: translateX(var(--spacing-2));
-	}
-
-	.update-novel {
-		font-weight: var(--font-weight-medium);
-		color: var(--text-primary);
-	}
-
-	.update-chapter {
-		color: var(--text-secondary);
-	}
-
-	.update-author {
-		color: var(--text-muted);
-		font-family: var(--font-mono);
-		font-size: var(--font-size-xs);
 	}
 </style>

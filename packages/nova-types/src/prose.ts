@@ -28,6 +28,8 @@ export type ChapterMeta = {
 
 /** Metadata for a novel/book project. */
 export type NovelMeta = {
+	/** Cover image URL (portrait ratio, recommended 400x600). */
+	coverUrl?: string
 	id: NovelId
 	title: string
 	author: string
