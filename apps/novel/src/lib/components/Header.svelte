@@ -1,5 +1,8 @@
 <script>
+	import { toggleTheme, getTheme } from '$lib/state/theme.svelte'
+
 	let { variant = 'reader' } = $props()
+	let theme = $derived(getTheme())
 </script>
 
 <header class="header" class:author={variant === 'author'}>
@@ -14,6 +17,9 @@
 		{/if}
 	</nav>
 	<div class="right">
+		<button class="theme-toggle" onclick={toggleTheme} aria-label="Toggle theme">
+			{theme === 'dark' ? '☀️' : '🌙'}
+		</button>
 		{#if variant === 'author'}
 			<span class="badge">Author</span>
 		{/if}
@@ -63,6 +69,24 @@
 		gap: 0.75rem;
 	}
 
+	.theme-toggle {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: 1px solid var(--border);
+		background: transparent;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.9rem;
+		transition: background 0.15s;
+	}
+
+	.theme-toggle:hover {
+		background: var(--surface-raised);
+	}
+
 	.badge {
 		font-size: 0.7rem;
 		padding: 0.2rem 0.5rem;
@@ -79,7 +103,7 @@
 		height: 32px;
 		border-radius: 50%;
 		border: 1px solid var(--border);
-		background: var(--bg);
+		background: transparent;
 		cursor: pointer;
 		display: flex;
 		align-items: center;

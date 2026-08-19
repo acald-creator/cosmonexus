@@ -1,7 +1,9 @@
 <script>
 	import { onMount } from 'svelte'
 	import { seed, isSeeded } from '$lib/data/seed'
+	import { initTheme } from '$lib/state/theme.svelte'
 	import '$lib/styles/tokens.css'
+	import '$lib/styles/tokens-dark.css'
 
 	let { children } = $props()
 
@@ -9,7 +11,7 @@
 		if (!isSeeded()) {
 			seed()
 		}
-		document.documentElement.setAttribute('data-theme', 'dark')
+		initTheme()
 	})
 </script>
 
@@ -18,8 +20,8 @@
 </div>
 
 <style>
-	:global([data-theme="dark"]) {
-		/* Bridge acaldwell-dev tokens to novel app shorthand variables */
+	:global(:root) {
+		/* Bridge light theme tokens to novel app shorthand */
 		--bg: var(--background-body);
 		--surface: var(--background-surface);
 		--surface-raised: var(--background-muted);
@@ -51,6 +53,7 @@
 		color: var(--text);
 		min-height: 100vh;
 		line-height: 1.6;
+		transition: background-color 0.2s ease, color 0.2s ease;
 	}
 
 	:global(a) {
