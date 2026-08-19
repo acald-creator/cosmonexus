@@ -84,12 +84,8 @@
 			<CoverGrid novels={filteredNovels} />
 		</section>
 
-		<!-- Collection Shelves (hidden when filtering) -->
-		{#if !selectedGenre}
 			<CollectionShelf title="Staff Picks" novels={staffPicks} />
 			<CollectionShelf title="Completed Series" novels={completedSeries} />
-			<CollectionShelf title="Rising Authors" novels={risingAuthors} />
-		{/if}
 
 		<!-- Author CTA -->
 		<section class="author-cta">
