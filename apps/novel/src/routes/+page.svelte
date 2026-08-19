@@ -69,7 +69,7 @@
 		{/if}
 
 		<!-- New This Week -->
-		{#if newThisWeek.length > 0 && !selectedGenre}
+		{#if newThisWeek.length > 0}
 			<CollectionShelf title="New This Week" novels={newThisWeek} />
 		{/if}
 
