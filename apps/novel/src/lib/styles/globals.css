@@ -1,29 +1,48 @@
 /* =============================================
-   NOVEL APP GLOBAL STYLES
+   NOVEL APP — EDITORIAL GLOBAL STYLES
    =============================================
-   Based on acaldwell-dev Palette v3 architecture.
-   Token CSS imported via +layout.svelte:
-   - tokens.css (light :root)
-   - tokens-dark.css (dark [data-theme="dark"])
+   Design Language: Editorial / Literary
+   Think: Apple Books + The New Yorker + Substack
+   
+   Principles:
+   - Text IS the interface — generous whitespace, minimal chrome
+   - Serif for reading, tight display sans for headings
+   - One accent color, otherwise ink-on-paper
+   - Typography-driven hierarchy (not borders/backgrounds)
+   - Character-measure-based widths for readability
    ============================================= */
 
 /* =============================================
-   ROOT ALIASES & LAYOUT TOKENS
+   ROOT — EDITORIAL TOKENS
    ============================================= */
 :root {
-	/* Font aliases */
-	--font-display: var(--font-family-display);
-	--font-sans: var(--font-family-sans);
+	/* Reading measure (optimal line length) */
+	--measure: 65ch;
+	--measure-narrow: 45ch;
+	--measure-wide: 80ch;
+
+	/* Editorial spacing scale (generous) */
+	--space-page: clamp(var(--spacing-6), 5vw, var(--spacing-12));
+	--space-section: var(--spacing-16);
+	--space-block: var(--spacing-8);
+	--space-flow: var(--spacing-4);
+
+	/* Typography — reading stack */
+	--font-reading: 'Literata', 'Georgia', 'Times New Roman', serif;
+	--font-display: var(--font-family-display, 'Bricolage Grotesque', system-ui, sans-serif);
+	--font-ui: var(--font-family-sans, 'DM Sans', system-ui, sans-serif);
 	--font-mono: var(--font-family-mono);
 
-	/* Layout */
-	--container-sm: 40rem;
-	--container-md: 48rem;
-	--container-lg: 64rem;
-	--container-xl: 80rem;
-	--container-padding: var(--spacing-6);
+	/* Reading sizes (slightly larger than UI) */
+	--text-reading: clamp(1.0625rem, 0.95rem + 0.25vw, 1.1875rem);
+	--text-reading-lg: clamp(1.125rem, 1rem + 0.3vw, 1.25rem);
 
-	/* Motion tiers */
+	/* Line heights — reading-optimized */
+	--leading-reading: 1.7;
+	--leading-tight: 1.2;
+	--leading-body: var(--line-height-normal);
+
+	/* Motion */
 	--motion-micro: var(--duration-100) var(--easing-out);
 	--motion-state: var(--duration-200) var(--easing-in-out);
 	--motion-enter: var(--duration-300) var(--easing-out);
@@ -31,22 +50,16 @@
 	/* Focus */
 	--focus-ring-offset: var(--focus-offset, 2px);
 
-	/* Surfaces (bridge) */
-	--bg-body: var(--background-body);
-	--bg-surface: var(--background-surface);
-	--bg-elevated: var(--background-elevated);
-	--bg-muted: var(--background-muted);
-
-	/* Text (bridge) */
+	/* Links */
 	--text-link: var(--color-accent-main);
 	--text-link-hover: var(--color-accent-light);
 
 	/* Code */
 	--code-bg: var(--background-muted);
-	--code-color: var(--color-accent-main);
+	--code-color: var(--text-secondary);
 
 	/* Selection */
-	--selection-bg: color-mix(in oklch, var(--color-accent-main) 30%, transparent);
+	--selection-bg: color-mix(in oklch, var(--color-accent-main) 20%, transparent);
 
 	color-scheme: light;
 }
@@ -70,12 +83,13 @@ html {
 	font-size: 100%;
 	scroll-behavior: smooth;
 	-webkit-text-size-adjust: 100%;
+	hanging-punctuation: first last;
 }
 
 body {
-	font-family: var(--font-family-sans);
+	font-family: var(--font-ui);
 	font-size: var(--font-size-base);
-	line-height: var(--line-height-normal);
+	line-height: var(--leading-body);
 	font-weight: var(--font-weight-normal);
 	color: var(--text-primary);
 	background: var(--background-body);
@@ -86,28 +100,126 @@ body {
 }
 
 /* =============================================
-   TYPOGRAPHY
+   EDITORIAL TYPOGRAPHY
    ============================================= */
 h1, h2, h3, h4, h5, h6 {
-	font-family: var(--font-family-display);
+	font-family: var(--font-display);
 	font-weight: var(--font-weight-bold);
-	line-height: var(--line-height-tight);
+	line-height: var(--leading-tight);
 	color: var(--text-primary);
-	letter-spacing: -0.02em;
+	letter-spacing: -0.025em;
 	text-wrap: balance;
 }
 
 h1 { font-size: var(--font-size-5xl); font-weight: var(--font-weight-extrabold); }
-h2 { font-size: var(--font-size-4xl); }
-h3 { font-size: var(--font-size-3xl); }
-h4 { font-size: var(--font-size-2xl); }
-h5 { font-size: var(--font-size-xl); }
-h6 { font-size: var(--font-size-lg); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
 
 p {
-	line-height: var(--line-height-relaxed);
+	line-height: var(--leading-body);
 	color: var(--text-secondary);
 	text-wrap: pretty;
+}
+
+/* =============================================
+   EDITORIAL PROSE (reading view)
+   ============================================= */
+.prose {
+	font-family: var(--font-reading);
+	font-size: var(--text-reading);
+	line-height: var(--leading-reading);
+	color: var(--text-primary);
+	max-width: var(--measure);
+	margin-inline: auto;
+}
+
+.prose p {
+	margin-block-end: 1.5em;
+	color: var(--text-primary);
+}
+
+.prose p + p {
+	text-indent: 1.5em;
+	margin-block-start: 0;
+}
+
+/* First paragraph after a heading — no indent, drop-cap-ready */
+.prose h1 + p,
+.prose h2 + p,
+.prose h3 + p,
+.prose hr + p {
+	text-indent: 0;
+}
+
+/* Chapter opening — small caps first line */
+.prose p:first-of-type {
+	text-indent: 0;
+}
+
+.prose p:first-of-type::first-line {
+	font-variant: small-caps;
+	font-size: 1.05em;
+	letter-spacing: 0.02em;
+}
+
+/* Headings within prose */
+.prose h1, .prose h2, .prose h3 {
+	font-family: var(--font-display);
+	color: var(--text-primary);
+	margin-block: 2.5em 1em;
+	text-indent: 0;
+}
+
+.prose h1 { font-size: var(--font-size-3xl); }
+.prose h2 { font-size: var(--font-size-2xl); }
+.prose h3 { font-size: var(--font-size-xl); }
+
+/* Blockquotes — dialogue or epigraphs */
+.prose blockquote {
+	margin-block: 2em;
+	margin-inline: var(--spacing-4);
+	padding-inline-start: var(--spacing-5);
+	border-inline-start: 2px solid var(--text-muted);
+	font-style: italic;
+	color: var(--text-secondary);
+}
+
+.prose blockquote p {
+	color: inherit;
+}
+
+/* Scene breaks — editorial ornament */
+.prose hr {
+	border: none;
+	margin-block: 3em;
+	text-align: center;
+}
+
+.prose hr::after {
+	content: '⁂';
+	font-size: var(--font-size-lg);
+	color: var(--text-muted);
+	letter-spacing: 0.5em;
+}
+
+/* Emphasis */
+.prose em {
+	font-style: italic;
+}
+
+.prose strong {
+	font-weight: var(--font-weight-semibold);
+}
+
+/* Lists in prose */
+.prose ul, .prose ol {
+	margin-block: 1.5em;
+	padding-inline-start: 1.5em;
+}
+
+.prose li {
+	margin-block-end: 0.5em;
 }
 
 /* =============================================
@@ -141,9 +253,14 @@ a {
 	transition: color var(--motion-micro);
 }
 
-a:hover,
-a:focus-visible {
+a:hover {
 	color: var(--text-link-hover);
+}
+
+a:focus-visible {
+	outline: 2px solid var(--focus-ring, var(--color-accent-main));
+	outline-offset: var(--focus-ring-offset);
+	border-radius: var(--radius-sm);
 }
 
 /* =============================================
@@ -158,14 +275,14 @@ a:focus-visible {
    CODE
    ============================================= */
 code, kbd, samp, pre {
-	font-family: var(--font-family-mono);
+	font-family: var(--font-mono);
 }
 
 code:not(pre code) {
 	background: var(--code-bg);
 	padding: 0.125em 0.375em;
 	border-radius: var(--radius-sm);
-	font-size: 0.9em;
+	font-size: 0.875em;
 	color: var(--code-color);
 }
 
@@ -205,7 +322,7 @@ code:not(pre code) {
 }
 
 /* =============================================
-   DARK MODE FALLBACK (no-JS)
+   DARK MODE NO-JS FALLBACK
    ============================================= */
 @media (prefers-color-scheme: dark) {
 	:root:not([data-theme]) {

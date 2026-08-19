@@ -27,7 +27,6 @@
 		}
 	})
 
-	// Simple JSON-to-HTML renderer for the reading view
 	function renderContent(doc: DocumentJSON): string {
 		if (!doc.content) return ''
 		return doc.content.map(renderNode).join('')
@@ -88,201 +87,199 @@
 	}
 </script>
 
-<header class="reader-header">
-	<a href="/novel/{novelId}" class="back-link">← {novel?.title ?? 'Back'}</a>
-	<span class="novel-title">{novel?.title ?? ''}</span>
-	<div class="reader-controls">
-		<button class="control-btn" aria-label="Font settings">Aa</button>
-		<button class="control-btn" aria-label="Dark mode">🌙</button>
+<header class="reader-bar">
+	<a href="/novel/{novelId}" class="back">← {novel?.title ?? 'Back'}</a>
+	<span class="chapter-indicator">{chapterOrder} of {totalChapters}</span>
+	<div class="controls">
+		<button class="control" aria-label="Text settings">Aa</button>
+		<button class="control" aria-label="Theme">🌙</button>
 	</div>
 </header>
 
 {#if chapter}
-	<main class="reader">
-		<article class="chapter-content">
-			<div class="chapter-heading">
-				<span class="chapter-label">Chapter {chapter.order}</span>
-				<h1>{chapter.title}</h1>
-			</div>
+	<main class="reader-page">
+		<article>
+			<header class="chapter-header">
+				<span class="chapter-number">Chapter {chapter.order}</span>
+				<h1 class="chapter-title">{chapter.title}</h1>
+			</header>
 
 			<div class="prose">
 				{@html renderedHtml}
 			</div>
 		</article>
 
-		<nav class="chapter-nav">
+		<nav class="chapter-nav" aria-label="Chapter navigation">
 			{#if prevOrder}
-				<a href="/novel/{novelId}/{prevOrder}" class="nav-btn prev">← Previous</a>
+				<a href="/novel/{novelId}/{prevOrder}" class="nav-link prev">
+					<span class="nav-direction">Previous</span>
+					<span class="nav-chapter">Chapter {prevOrder}</span>
+				</a>
 			{:else}
 				<span></span>
 			{/if}
-			<span class="chapter-progress">{chapterOrder} / {totalChapters}</span>
 			{#if nextOrder}
-				<a href="/novel/{novelId}/{nextOrder}" class="nav-btn next">Next →</a>
+				<a href="/novel/{novelId}/{nextOrder}" class="nav-link next">
+					<span class="nav-direction">Next</span>
+					<span class="nav-chapter">Chapter {nextOrder}</span>
+				</a>
 			{:else}
-				<span class="nav-btn end">End</span>
+				<div class="end-marker">
+					<span>End of novel</span>
+				</div>
 			{/if}
 		</nav>
 	</main>
 {:else}
-	<main class="reader">
-		<p class="not-found">Chapter not found. <a href="/novel/{novelId}">← Back to novel</a></p>
+	<main class="reader-page">
+		<p class="not-found">Chapter not found. <a href="/novel/{novelId}">Return to novel</a></p>
 	</main>
 {/if}
 
 <style>
-	.reader-header {
+	/* ─── Reader Bar ─── */
+	.reader-bar {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: var(--spacing-3) var(--spacing-8);
-		border-bottom: 1px solid var(--border-light);
+		padding-block: var(--spacing-3);
+		padding-inline: var(--space-page);
+		border-block-end: 1px solid var(--border-light);
 		background: var(--background-surface);
 		position: sticky;
-		top: 0;
-		z-index: 100;
+		inset-block-start: 0;
+		z-index: 10;
 	}
 
-	.back-link {
-		color: var(--color-accent-main);
-		text-decoration: none;
-		font-size: var(--font-size-sm);
-	}
-
-	.novel-title {
+	.back {
 		font-size: var(--font-size-sm);
 		color: var(--text-muted);
+		text-decoration: none;
+		transition: color var(--motion-micro);
 	}
 
-	.reader-controls {
+	.back:hover { color: var(--text-primary); }
+
+	.chapter-indicator {
+		font-size: var(--font-size-xs);
+		font-family: var(--font-mono);
+		color: var(--text-muted);
+		letter-spacing: 0.05em;
+	}
+
+	.controls {
 		display: flex;
 		gap: var(--spacing-1);
 	}
 
-	.control-btn {
-		width: 32px;
-		height: 32px;
-		border-radius: var(--radius-md);
+	.control {
+		width: var(--spacing-8);
+		height: var(--spacing-8);
+		border-radius: var(--radius-full);
 		border: 1px solid var(--border-light);
 		background: transparent;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		display: grid;
+		place-items: center;
 		font-size: var(--font-size-sm);
+		transition: background-color var(--motion-micro), color var(--motion-micro);
 	}
 
-	.control-btn:hover {
+	.control:hover {
 		background: var(--background-muted);
+		color: var(--text-primary);
 	}
 
-	.reader {
-		max-width: 680px;
-		margin: 0 auto;
-		padding: var(--spacing-12) var(--spacing-8);
+	/* ─── Reader Page ─── */
+	.reader-page {
+		padding-block: var(--space-section);
+		padding-inline: var(--space-page);
 	}
 
 	.not-found {
+		text-align: center;
 		color: var(--text-muted);
+		padding-block: var(--space-section);
+	}
+
+	/* ─── Chapter Header ─── */
+	.chapter-header {
 		text-align: center;
-		padding: 4rem 0;
+		margin-block-end: var(--space-section);
+		max-width: var(--measure);
+		margin-inline: auto;
 	}
 
-	.not-found a {
-		color: var(--color-accent-main);
-		text-decoration: none;
-	}
-
-	.chapter-heading {
-		text-align: center;
-		margin-block-end: var(--spacing-12);
-	}
-
-	.chapter-label {
-		font-size: var(--font-size-sm);
+	.chapter-number {
+		display: block;
+		font-size: var(--font-size-xs);
+		font-family: var(--font-ui);
 		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		letter-spacing: 0.15em;
 		color: var(--text-muted);
+		margin-block-end: var(--spacing-3);
 	}
 
-	.chapter-heading h1 {
-		font-size: var(--font-size-4xl);
+	.chapter-title {
+		font-family: var(--font-display);
+		font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-5xl));
 		font-weight: var(--font-weight-bold);
-		font-family: var(--font-family-display);
-		margin-block-start: var(--spacing-1);
-	}
-
-	.prose {
-		font-family: var(--font-family-display);
-		font-size: var(--font-size-lg);
-		line-height: 1.9;
-		color: var(--text-secondary);
-	}
-
-	.prose :global(p) {
-		margin-bottom: 1.25em;
-		text-indent: 1.5em;
-	}
-
-	.prose :global(p:first-child) {
-		text-indent: 0;
-	}
-
-	.prose :global(h1), .prose :global(h2), .prose :global(h3) {
-		font-family: var(--font-family-sans);
+		line-height: var(--leading-tight);
+		letter-spacing: -0.03em;
 		color: var(--text-primary);
-		margin: 2em 0 0.5em;
-		text-indent: 0;
 	}
 
-	.prose :global(blockquote) {
-		border-left: 3px solid var(--color-accent-pink);
-		padding-left: 1em;
-		color: var(--text-secondary);
-		font-style: italic;
-		margin: 1.5em 0;
-	}
-
-	.prose :global(hr) {
-		border: none;
-		border-top: 1px solid var(--border-light);
-		margin: 2.5em auto;
-		width: 40%;
-	}
-
+	/* ─── Chapter Navigation ─── */
 	.chapter-nav {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
-		padding-block: var(--spacing-8);
-		margin-block-start: var(--spacing-12);
-		border-top: 1px solid var(--border-light);
+		align-items: stretch;
+		max-width: var(--measure);
+		margin-inline: auto;
+		margin-block-start: var(--space-section);
+		padding-block-start: var(--space-block);
+		border-block-start: 1px solid var(--border-light);
 	}
 
-	.nav-btn {
-		padding: var(--spacing-2) var(--spacing-4);
-		border-radius: var(--radius-md);
-		border: 1px solid var(--border-light);
+	.nav-link {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-0-5);
+		padding: var(--spacing-3) var(--spacing-4);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		font-size: var(--font-size-sm);
-		color: var(--text-secondary);
-		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
+		transition: background-color var(--motion-micro);
 	}
 
-	.nav-btn:hover {
-		border-color: var(--color-accent-main);
-		color: var(--color-accent-main);
+	.nav-link:hover {
+		background: var(--background-muted);
 	}
 
-	.nav-btn.end {
+	.nav-link.next {
+		text-align: end;
+		margin-inline-start: auto;
+	}
+
+	.nav-direction {
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
 		color: var(--text-muted);
-		border-color: transparent;
 	}
 
-	.chapter-progress {
+	.nav-chapter {
+		font-size: var(--font-size-sm);
+		font-weight: var(--font-weight-medium);
+		color: var(--text-primary);
+	}
+
+	.end-marker {
+		display: flex;
+		align-items: center;
+		margin-inline-start: auto;
 		font-size: var(--font-size-sm);
 		color: var(--text-muted);
-		font-family: var(--font-family-mono);
+		font-style: italic;
 	}
 </style>
