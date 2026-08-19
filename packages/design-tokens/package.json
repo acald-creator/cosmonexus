@@ -17,20 +17,23 @@
 			"require": "./dist/contract.css.cjs"
 		},
 		"./themes/dark": {
-			"./themes/light": {
-				"types": "./dist/themes/light.css.d.ts",
-				"import": "./dist/themes/light.css.js",
-				"require": "./dist/themes/light.css.cjs"
-			},
 			"types": "./dist/themes/dark.css.d.ts",
 			"import": "./dist/themes/dark.css.js",
 			"require": "./dist/themes/dark.css.cjs"
+		},
+		"./themes/light": {
+			"types": "./dist/themes/light.css.d.ts",
+			"import": "./dist/themes/light.css.js",
+			"require": "./dist/themes/light.css.cjs"
 		},
 		"./global": {
 			"types": "./dist/global.css.d.ts",
 			"import": "./dist/global.css.js",
 			"require": "./dist/global.css.cjs"
-		}
+		},
+		"./css": "./dist/css/tokens.css",
+		"./css/dark": "./dist/css/tokens.dark.css",
+		"./css/light": "./dist/css/tokens.light.css"
 	},
 	"files": [
 		"dist/**",
@@ -38,7 +41,7 @@
 	],
 	"sideEffects": false,
 	"scripts": {
-		"build": "tsup",
+		"build": "bun run tokens:generate && tsup",
 		"tokens:generate": "bun scripts/generate.ts",
 		"test": "vitest run",
 		"lint": "biome check .",
