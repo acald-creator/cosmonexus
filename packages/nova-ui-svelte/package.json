@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-ui-svelte",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"svelte": "./dist/index.js",
 	"exports": {
@@ -8,28 +8,27 @@
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js",
 			"import": "./dist/index.js"
-		}
+		},
+		"./styles.css": "./dist/styles.css"
 	},
 	"files": ["dist"],
 	"scripts": {
-		"build": "svelte-package",
+		"build": "rm -rf dist && vite build && mv dist/styles-runtime.css dist/styles.css && svelte-package -o dist/components && node scripts/assemble.mjs",
 		"lint": "biome check .",
 		"typecheck": "svelte-check --tsconfig ./tsconfig.json"
 	},
 	"dependencies": {
-		"@cosmonexus/design-tokens": "workspace:*"
+		"@cosmonexus/design-tokens": "workspace:*",
+		"@vanilla-extract/css": "^1.15.0",
+		"@vanilla-extract/recipes": "^0.5.0"
 	},
 	"peerDependencies": {
-		"@vanilla-extract/css": "^1.15.0",
-		"@vanilla-extract/recipes": "^0.5.0",
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
 		"@cosmonexus/tsconfig": "workspace:*",
 		"@sveltejs/package": "^2.3.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
-		"@vanilla-extract/css": "^1.15.0",
-		"@vanilla-extract/recipes": "^0.5.0",
 		"@vanilla-extract/vite-plugin": "^4.0.0",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
