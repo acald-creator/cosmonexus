@@ -9,10 +9,15 @@
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"typecheck": "moon run :typecheck",
-		"format": "biome format --write ."
+		"format": "biome format --write .",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "moon run :build && changeset publish"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@changesets/changelog-github": "0",
+		"@changesets/cli": "2",
 		"@codemirror/language": "^6.12.4",
 		"@codemirror/legacy-modes": "^6.5.3",
 		"@codemirror/lint": "^6.9.7",
