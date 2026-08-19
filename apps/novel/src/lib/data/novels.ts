@@ -1,26 +1,43 @@
-import type { NovelMeta, ChapterMeta } from '@cosmonexus/nova-types'
-import * as storage from './storage'
+import type { NovelMeta } from '@cosmonexus/nova-types'
+import { getDatabase } from './database'
+import { getNovelsCache } from './init'
+import { uid } from './storage'
 
-const NOVELS_INDEX_KEY = 'novels'
-
-/** Get all novels (metadata only). */
+/** Get all novels (metadata only). Reads from cache (sync). */
 export function listNovels(): NovelMeta[] {
-	return storage.get<NovelMeta[]>(NOVELS_INDEX_KEY) ?? []
+	return getNovelsCache()
 }
 
-/** Get a single novel by ID. */
+/** Get a single novel by ID. Reads from cache (sync). */
 export function getNovel(id: string): NovelMeta | null {
-	const novels = listNovels()
-	return novels.find((n) => n.id === id) ?? null
+	return getNovelsCache().find(n => n.id === id) ?? null
 }
 
-/** Create a new novel. Returns the created novel. */
-export function createNovel(data: { title: string; author: string; genre?: string; synopsis?: string; targetWordCount?: number }): NovelMeta {
-	const novels = listNovels()
+/** Create a new novel. */
+export async function createNovel(data: {
+	title: string
+	author: string
+	genre?: string
+	synopsis?: string
+	targetWordCount?: number
+}): Promise<NovelMeta> {
+	const db = await getDatabase()
 	const now = new Date().toISOString()
+	const id = uid()
 
-	const novel: NovelMeta = {
-		id: storage.uid(),
+	await db.novels.insert({
+		id,
+		title: data.title,
+		author: data.author,
+		genre: data.genre,
+		synopsis: data.synopsis,
+		targetWordCount: data.targetWordCount,
+		createdAt: now,
+		updatedAt: now,
+	})
+
+	return {
+		id,
 		title: data.title,
 		author: data.author,
 		genre: data.genre,
@@ -30,51 +47,30 @@ export function createNovel(data: { title: string; author: string; genre?: strin
 		createdAt: now,
 		updatedAt: now,
 	}
-
-	novels.push(novel)
-	storage.set(NOVELS_INDEX_KEY, novels)
-	return novel
 }
 
 /** Update a novel's metadata. */
-export function updateNovel(id: string, updates: Partial<Omit<NovelMeta, 'id' | 'createdAt'>>): NovelMeta | null {
-	const novels = listNovels()
-	const idx = novels.findIndex((n) => n.id === id)
-	if (idx === -1) return null
-
-	novels[idx] = {
-		...novels[idx],
+export async function updateNovel(
+	id: string,
+	updates: Partial<Omit<NovelMeta, 'id' | 'createdAt' | 'chapters'>>,
+): Promise<NovelMeta | null> {
+	const db = await getDatabase()
+	const doc = await db.novels.findOne(id).exec()
+	if (!doc) return null
+	await doc.incrementalPatch({
 		...updates,
 		updatedAt: new Date().toISOString(),
-	}
-
-	storage.set(NOVELS_INDEX_KEY, novels)
-	return novels[idx]
+	})
+	return getNovel(id)
 }
 
-/** Delete a novel and all its chapter content. */
-export function deleteNovel(id: string): void {
-	const novels = listNovels()
-	const novel = novels.find((n) => n.id === id)
-	if (!novel) return
-
-	// Remove all chapter content
-	for (const ch of novel.chapters) {
-		storage.remove(`chapter:${id}:${ch.id}`)
-	}
-
-	storage.set(NOVELS_INDEX_KEY, novels.filter((n) => n.id !== id))
-}
-
-/** Update the chapters array within a novel (used by chapter CRUD). */
-export function setNovelChapters(novelId: string, chapters: ChapterMeta[]): void {
-	const novels = listNovels()
-	const idx = novels.findIndex((n) => n.id === novelId)
-	if (idx === -1) return
-
-	novels[idx].chapters = chapters
-	novels[idx].updatedAt = new Date().toISOString()
-	storage.set(NOVELS_INDEX_KEY, novels)
+/** Delete a novel and all its chapters. */
+export async function deleteNovel(id: string): Promise<void> {
+	const db = await getDatabase()
+	const chapters = await db.chapters.find({ selector: { novelId: id } }).exec()
+	await Promise.all(chapters.map(ch => ch.remove()))
+	const novel = await db.novels.findOne(id).exec()
+	if (novel) await novel.remove()
 }
 
 /** Get total word count for a novel. */
@@ -82,4 +78,10 @@ export function getNovelWordCount(id: string): number {
 	const novel = getNovel(id)
 	if (!novel) return 0
 	return novel.chapters.reduce((sum, ch) => sum + ch.wordCount, 0)
+}
+
+/** Update the chapters array within a novel (used by chapter CRUD). */
+export function setNovelChapters(): void {
+	// No-op: chapters are now a separate collection.
+	// This function exists for backward compat with publishing.ts
 }

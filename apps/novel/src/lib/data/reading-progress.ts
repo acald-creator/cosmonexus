@@ -1,5 +1,6 @@
 import type { NovelMeta, ChapterMeta } from '@cosmonexus/nova-types'
-import * as storage from './storage'
+import { getDatabase } from './database'
+import { uid } from './storage'
 
 export type ReadingProgress = {
 	novelId: string
@@ -8,33 +9,51 @@ export type ReadingProgress = {
 	updatedAt: string
 }
 
-function key(novelId: string): string {
-	return `reading-progress:${novelId}`
-}
-
-/** Get reading progress for a novel. Returns null if none exists. */
+/** Get reading progress for a novel. */
 export function getProgress(novelId: string): ReadingProgress | null {
-	return storage.get<ReadingProgress>(key(novelId))
+	// Sync read not available without cache — return null initially.
+	// Components should use progress$ reactive query for live data.
+	return null
 }
 
-/** Mark a chapter as read. Idempotent — won't overwrite existing timestamp. */
-export function markChapterRead(novelId: string, chapterId: string): void {
-	let progress = getProgress(novelId)
-	if (!progress) {
-		progress = {
-			novelId,
-			chaptersRead: {},
-			lastChapterId: null,
-			updatedAt: new Date().toISOString(),
-		}
+/** Get reading progress (async version). */
+export async function getProgressAsync(novelId: string): Promise<ReadingProgress | null> {
+	const db = await getDatabase()
+	const doc = await db.progress.findOne({ selector: { novelId } }).exec()
+	if (!doc) return null
+	return {
+		novelId: doc.novelId,
+		chaptersRead: doc.chaptersRead ?? {},
+		lastChapterId: doc.lastChapterId ?? null,
+		updatedAt: doc.updatedAt,
 	}
+}
 
-	if (!progress.chaptersRead[chapterId]) {
-		progress.chaptersRead[chapterId] = new Date().toISOString()
+/** Mark a chapter as read. Idempotent. */
+export async function markChapterRead(novelId: string, chapterId: string): Promise<void> {
+	const db = await getDatabase()
+	const existing = await db.progress.findOne({ selector: { novelId } }).exec()
+	const now = new Date().toISOString()
+
+	if (!existing) {
+		await db.progress.insert({
+			id: uid(),
+			novelId,
+			chaptersRead: { [chapterId]: now },
+			lastChapterId: chapterId,
+			updatedAt: now,
+		})
+	} else {
+		const chaptersRead = { ...existing.chaptersRead }
+		if (!chaptersRead[chapterId]) {
+			chaptersRead[chapterId] = now
+		}
+		await existing.incrementalPatch({
+			chaptersRead,
+			lastChapterId: chapterId,
+			updatedAt: now,
+		})
 	}
-	progress.lastChapterId = chapterId
-	progress.updatedAt = new Date().toISOString()
-	storage.set(key(novelId), progress)
 }
 
 /** Find the next unread published chapter. */
@@ -42,7 +61,6 @@ export function getNextUnread(novel: NovelMeta, progress: ReadingProgress | null
 	const published = novel.chapters
 		.filter(ch => ch.status === 'final' || ch.status === 'editing')
 		.sort((a, b) => a.order - b.order)
-
 	if (!progress) return published[0] ?? null
 	return published.find(ch => !progress.chaptersRead[ch.id]) ?? null
 }
