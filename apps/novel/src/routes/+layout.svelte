@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte'
 	import { seed, isSeeded } from '$lib/data/seed'
+	import { darkTheme } from '@cosmonexus/design-tokens'
 
 	let { children } = $props()
 
@@ -11,7 +12,7 @@
 	})
 </script>
 
-<div class="app">
+<div class="app {darkTheme}">
 	{@render children()}
 </div>
 
