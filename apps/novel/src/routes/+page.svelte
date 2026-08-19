@@ -134,7 +134,7 @@
 		padding-block: var(--space-block);
 		border-block-end: 1px solid var(--border-light);
 		text-decoration: none;
-		transition: padding-inline-start var(--motion-state);
+		transition: transform var(--motion-state);
 	}
 
 	.novel-entry:first-child {
@@ -142,7 +142,7 @@
 	}
 
 	.novel-entry:hover {
-		padding-inline-start: var(--spacing-3);
+		transform: translateX(var(--spacing-3));
 	}
 
 	.novel-entry-meta {
@@ -229,11 +229,11 @@
 		border-block-end: 1px solid var(--border-light);
 		text-decoration: none;
 		font-size: var(--font-size-sm);
-		transition: padding-inline-start var(--motion-micro);
+		transition: transform var(--motion-micro);
 	}
 
 	.update-row:hover {
-		padding-inline-start: var(--spacing-2);
+		transform: translateX(var(--spacing-2));
 	}
 
 	.update-novel {
