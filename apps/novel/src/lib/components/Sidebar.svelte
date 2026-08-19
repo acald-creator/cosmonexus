@@ -44,22 +44,22 @@
 	.sidebar {
 		width: 240px;
 		min-height: 100%;
-		border-right: 1px solid var(--border);
-		background: var(--surface);
-		padding: 1.25rem;
+		border-inline-end: 1px solid var(--border-light);
+		background: var(--background-surface);
+		padding: var(--spacing-5);
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: var(--spacing-8);
 		overflow-y: auto;
 	}
 
 	.section-title {
-		font-size: 0.7rem;
+		font-size: var(--font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
-		color: var(--muted);
-		margin-bottom: 0.75rem;
-		font-weight: 600;
+		color: var(--text-muted);
+		margin-block-end: var(--spacing-3);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.book-list {
@@ -68,69 +68,79 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--spacing-1);
 	}
 
 	.book-item {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.5rem 0.75rem;
-		border-radius: 6px;
+		padding: var(--spacing-2) var(--spacing-3);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		color: var(--text);
-		font-size: 0.85rem;
-		transition: background 0.15s;
+		color: var(--text-primary);
+		font-size: var(--font-size-sm);
+		transition: background-color var(--duration-150) ease;
 	}
 
 	.book-item:hover {
-		background: var(--bg);
+		background: var(--background-body);
+	}
+
+	.book-item:focus-visible {
+		outline: none;
+		box-shadow: var(--focus-ring);
 	}
 
 	.book-item.active {
-		background: var(--primary-dim);
-		color: var(--primary);
+		background: var(--color-accent-soft);
+		color: var(--color-accent-main);
 	}
 
 	.book-meta {
-		font-size: 0.7rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 	}
 
 	.new-book-btn {
 		display: block;
-		margin-top: 0.5rem;
-		padding: 0.4rem 0.75rem;
-		border-radius: 6px;
-		border: 1px dashed var(--border);
+		margin-block-start: var(--spacing-2);
+		padding: var(--spacing-1-5) var(--spacing-3);
+		border-radius: var(--radius-lg);
+		border: 1px dashed var(--border-light);
 		text-align: center;
-		color: var(--muted);
+		color: var(--text-muted);
 		text-decoration: none;
-		font-size: 0.8rem;
-		transition: all 0.15s;
+		font-size: var(--font-size-sm);
+		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
 	}
 
 	.new-book-btn:hover {
-		border-color: var(--primary);
-		color: var(--primary);
+		border-color: var(--color-accent-main);
+		color: var(--color-accent-main);
+	}
+
+	.new-book-btn:focus-visible {
+		outline: none;
+		box-shadow: var(--focus-ring);
 	}
 
 	.stat-row {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 0.5rem;
+		margin-block-end: var(--spacing-2);
 	}
 
 	.stat-label {
-		font-size: 0.8rem;
-		color: var(--muted);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
 	}
 
 	.stat-value {
-		font-size: 0.8rem;
-		font-weight: 600;
-		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		font-weight: var(--font-weight-semibold);
+		font-family: var(--font-family-mono);
 	}
 </style>

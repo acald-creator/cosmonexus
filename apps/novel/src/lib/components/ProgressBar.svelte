@@ -20,38 +20,38 @@
 	.progress-container {
 		display: flex;
 		flex-direction: column;
-		gap: 0.3rem;
+		gap: var(--spacing-1);
 	}
 
 	.progress-label {
 		display: flex;
 		justify-content: space-between;
-		font-size: 0.75rem;
-		color: var(--muted);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
 	}
 
 	.progress-stats {
-		font-family: var(--font-mono);
+		font-family: var(--font-family-mono);
 	}
 
 	.progress-track {
 		height: 6px;
-		background: var(--bg);
-		border-radius: 3px;
+		background: var(--background-body);
+		border-radius: var(--radius-full);
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: var(--primary);
-		border-radius: 3px;
-		transition: width 0.3s ease;
+		background: var(--color-accent-main);
+		border-radius: var(--radius-full);
+		transition: width var(--duration-300) ease;
 	}
 
 	.progress-percent {
-		font-size: 0.7rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 		align-self: flex-end;
 	}
 </style>

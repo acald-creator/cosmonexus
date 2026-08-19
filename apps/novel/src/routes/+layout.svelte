@@ -20,27 +20,6 @@
 </div>
 
 <style>
-	:global(:root) {
-		/* Bridge light theme tokens to novel app shorthand */
-		--bg: var(--background-body);
-		--surface: var(--background-surface);
-		--surface-raised: var(--background-muted);
-		--border: var(--border-light);
-		--text: var(--text-primary);
-		--text-dim: var(--text-secondary);
-		--muted: var(--text-muted);
-		--primary: var(--color-accent-main);
-		--primary-dim: var(--color-accent-soft);
-		--secondary: var(--color-accent-pink);
-		--accent: var(--color-accent-blue);
-		--success: var(--color-success-text);
-		--warning: var(--color-warning-text);
-		--error: var(--color-error-text);
-		--font-sans: var(--font-family-sans);
-		--font-serif: var(--font-family-display);
-		--font-mono: var(--font-family-mono);
-	}
-
 	:global(*, *::before, *::after) {
 		box-sizing: border-box;
 		margin: 0;
@@ -48,12 +27,12 @@
 	}
 
 	:global(body) {
-		font-family: var(--font-sans);
-		background: var(--bg);
-		color: var(--text);
-		min-height: 100vh;
-		line-height: 1.6;
-		transition: background-color 0.2s ease, color 0.2s ease;
+		font-family: var(--font-family-sans);
+		background: var(--background-body);
+		color: var(--text-primary);
+		min-height: 100dvh;
+		line-height: var(--line-height-normal);
+		transition: background-color var(--duration-200) ease, color var(--duration-200) ease;
 	}
 
 	:global(a) {
@@ -61,7 +40,7 @@
 	}
 
 	.app {
-		min-height: 100vh;
+		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
 	}
