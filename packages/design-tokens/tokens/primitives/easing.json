@@ -1,0 +1,15 @@
+{
+  "$description": "Easing primitives sourced from Open Props",
+  "primitives": {
+    "easing": {
+      "out": {
+        "$value": "cubic-bezier(0, 0, 0.3, 1)",
+        "$type": "cubicBezier"
+      },
+      "inOut": {
+        "$value": "cubic-bezier(0.5, 0, 0.5, 1)",
+        "$type": "cubicBezier"
+      }
+    }
+  }
+}

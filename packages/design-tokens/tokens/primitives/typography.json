@@ -1,0 +1,65 @@
+{
+  "$description": "Typography primitives — IBM Plex font families, modular size scale, weights, and line heights",
+  "primitives": {
+    "font": {
+      "sans": {
+        "$value": "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+        "$type": "fontFamily"
+      },
+      "mono": {
+        "$value": "'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace",
+        "$type": "fontFamily"
+      }
+    },
+    "fontSize": {
+      "xs": {
+        "$value": "0.75rem",
+        "$type": "dimension"
+      },
+      "sm": {
+        "$value": "0.8125rem",
+        "$type": "dimension"
+      },
+      "base": {
+        "$value": "0.9375rem",
+        "$type": "dimension"
+      },
+      "lg": {
+        "$value": "1.125rem",
+        "$type": "dimension"
+      },
+      "xl": {
+        "$value": "1.375rem",
+        "$type": "dimension"
+      },
+      "xxl": {
+        "$value": "1.75rem",
+        "$type": "dimension"
+      }
+    },
+    "fontWeight": {
+      "medium": {
+        "$value": 500,
+        "$type": "number"
+      },
+      "semibold": {
+        "$value": 600,
+        "$type": "number"
+      },
+      "bold": {
+        "$value": 700,
+        "$type": "number"
+      }
+    },
+    "lineHeight": {
+      "tight": {
+        "$value": 1.25,
+        "$type": "number"
+      },
+      "normal": {
+        "$value": 1.5,
+        "$type": "number"
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$description": "Light theme semantic color assignments",
+  "color": {
+    "surface0": {
+      "$value": "{primitives.color.neutral.50}",
+      "$type": "color"
+    },
+    "surface1": {
+      "$value": "{primitives.color.neutral.100}",
+      "$type": "color"
+    },
+    "surface2": {
+      "$value": "{primitives.color.neutral.150}",
+      "$type": "color"
+    },
+    "surface3": {
+      "$value": "{primitives.color.neutral.200}",
+      "$type": "color"
+    },
+    "surface4": {
+      "$value": "{primitives.color.neutral.250}",
+      "$type": "color"
+    },
+    "text1": {
+      "$value": "{primitives.color.neutral.900}",
+      "$type": "color"
+    },
+    "text2": {
+      "$value": "{primitives.color.neutral.600}",
+      "$type": "color"
+    },
+    "text3": {
+      "$value": "{primitives.color.neutral.500}",
+      "$type": "color"
+    }
+  }
+}

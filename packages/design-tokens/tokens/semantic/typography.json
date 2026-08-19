@@ -1,0 +1,24 @@
+{
+  "$description": "Semantic typography tokens aliasing primitive font families, sizes, weights, and line heights",
+  "font": {
+    "sans": { "$value": "{primitives.font.sans}" },
+    "mono": { "$value": "{primitives.font.mono}" }
+  },
+  "fontSize": {
+    "xs": { "$value": "{primitives.fontSize.xs}" },
+    "sm": { "$value": "{primitives.fontSize.sm}" },
+    "base": { "$value": "{primitives.fontSize.base}" },
+    "lg": { "$value": "{primitives.fontSize.lg}" },
+    "xl": { "$value": "{primitives.fontSize.xl}" },
+    "xxl": { "$value": "{primitives.fontSize.xxl}" }
+  },
+  "fontWeight": {
+    "medium": { "$value": "{primitives.fontWeight.medium}" },
+    "semibold": { "$value": "{primitives.fontWeight.semibold}" },
+    "bold": { "$value": "{primitives.fontWeight.bold}" }
+  },
+  "lineHeight": {
+    "tight": { "$value": "{primitives.lineHeight.tight}" },
+    "normal": { "$value": "{primitives.lineHeight.normal}" }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$description": "Semantic color tokens — shared between themes",
+  "color": {
+    "accent1": {
+      "$value": "{primitives.color.primary.400}",
+      "$type": "color"
+    },
+    "accent2": {
+      "$value": "{primitives.color.primary.300}",
+      "$type": "color"
+    },
+    "accent3": {
+      "$value": "{primitives.color.primary.500}",
+      "$type": "color"
+    },
+    "accentBg": {
+      "$value": "oklch(0.67 0.176 295 / 0.1)",
+      "$type": "color"
+    },
+    "success": {
+      "$value": "{primitives.color.success.base}",
+      "$type": "color"
+    },
+    "successBg": {
+      "$value": "oklch(0.75 0.17 145 / 0.1)",
+      "$type": "color"
+    },
+    "error": {
+      "$value": "{primitives.color.error.base}",
+      "$type": "color"
+    },
+    "errorBg": {
+      "$value": "oklch(0.68 0.2 18 / 0.1)",
+      "$type": "color"
+    },
+    "errorBorder": {
+      "$value": "oklch(0.68 0.2 18 / 0.3)",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{primitives.color.warning.base}",
+      "$type": "color"
+    },
+    "warningBg": {
+      "$value": "oklch(0.8 0.16 75 / 0.1)",
+      "$type": "color"
+    },
+    "warningBorder": {
+      "$value": "oklch(0.8 0.16 75 / 0.3)",
+      "$type": "color"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "$description": "Generated OKLCH color primitives from brand color #8B5CF6",
+  "primitives": {
+    "color": {
+      "primary": {
+        "50": {
+          "$value": "oklch(0.97 0.044 295)",
+          "$type": "color"
+        },
+        "100": {
+          "$value": "oklch(0.93 0.063 295)",
+          "$type": "color"
+        },
+        "200": {
+          "$value": "oklch(0.84 0.1 295)",
+          "$type": "color"
+        },
+        "300": {
+          "$value": "oklch(0.76 0.138 295)",
+          "$type": "color"
+        },
+        "400": {
+          "$value": "oklch(0.67 0.176 295)",
+          "$type": "color"
+        },
+        "500": {
+          "$value": "oklch(0.59 0.213 295)",
+          "$type": "color"
+        },
+        "600": {
+          "$value": "oklch(0.5 0.189 295)",
+          "$type": "color"
+        },
+        "700": {
+          "$value": "oklch(0.42 0.151 295)",
+          "$type": "color"
+        },
+        "800": {
+          "$value": "oklch(0.33 0.114 295)",
+          "$type": "color"
+        },
+        "900": {
+          "$value": "oklch(0.25 0.076 295)",
+          "$type": "color"
+        }
+      },
+      "secondary": {
+        "50": {
+          "$value": "oklch(0.97 0.039 55)",
+          "$type": "color"
+        },
+        "100": {
+          "$value": "oklch(0.93 0.054 55)",
+          "$type": "color"
+        },
+        "200": {
+          "$value": "oklch(0.84 0.084 55)",
+          "$type": "color"
+        },
+        "300": {
+          "$value": "oklch(0.76 0.114 55)",
+          "$type": "color"
+        },
+        "400": {
+          "$value": "oklch(0.67 0.145 55)",
+          "$type": "color"
+        },
+        "500": {
+          "$value": "oklch(0.59 0.175 55)",
+          "$type": "color"
+        },
+        "600": {
+          "$value": "oklch(0.5 0.155 55)",
+          "$type": "color"
+        },
+        "700": {
+          "$value": "oklch(0.42 0.125 55)",
+          "$type": "color"
+        },
+        "800": {
+          "$value": "oklch(0.33 0.095 55)",
+          "$type": "color"
+        },
+        "900": {
+          "$value": "oklch(0.25 0.065 55)",
+          "$type": "color"
+        }
+      },
+      "neutral": {
+        "50": {
+          "$value": "oklch(0.97 0.005 278)",
+          "$type": "color"
+        },
+        "100": {
+          "$value": "oklch(0.92 0.006 278)",
+          "$type": "color"
+        },
+        "150": {
+          "$value": "oklch(0.87 0.006 278)",
+          "$type": "color"
+        },
+        "200": {
+          "$value": "oklch(0.82 0.007 278)",
+          "$type": "color"
+        },
+        "250": {
+          "$value": "oklch(0.77 0.007 278)",
+          "$type": "color"
+        },
+        "300": {
+          "$value": "oklch(0.72 0.008 278)",
+          "$type": "color"
+        },
+        "400": {
+          "$value": "oklch(0.62 0.009 278)",
+          "$type": "color"
+        },
+        "500": {
+          "$value": "oklch(0.53 0.01 278)",
+          "$type": "color"
+        },
+        "600": {
+          "$value": "oklch(0.43 0.011 278)",
+          "$type": "color"
+        },
+        "700": {
+          "$value": "oklch(0.33 0.013 278)",
+          "$type": "color"
+        },
+        "750": {
+          "$value": "oklch(0.28 0.013 278)",
+          "$type": "color"
+        },
+        "800": {
+          "$value": "oklch(0.23 0.014 278)",
+          "$type": "color"
+        },
+        "850": {
+          "$value": "oklch(0.18 0.014 278)",
+          "$type": "color"
+        },
+        "900": {
+          "$value": "oklch(0.13 0.015 278)",
+          "$type": "color"
+        }
+      },
+      "success": {
+        "base": {
+          "$value": "oklch(0.75 0.17 145)",
+          "$type": "color"
+        }
+      },
+      "error": {
+        "base": {
+          "$value": "oklch(0.68 0.2 18)",
+          "$type": "color"
+        }
+      },
+      "warning": {
+        "base": {
+          "$value": "oklch(0.8 0.16 75)",
+          "$type": "color"
+        }
+      },
+      "info": {
+        "base": {
+          "$value": "oklch(0.7 0.15 250)",
+          "$type": "color"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$description": "Shadow primitives inspired by Open Props",
+  "primitives": {
+    "shadow": {
+      "md": {
+        "$value": "0 4px 12px oklch(0 0 0 / 0.4)",
+        "$type": "shadow"
+      },
+      "glow": {
+        "$value": "0 0 20px oklch(0.72 0.18 295 / 0.2)",
+        "$type": "shadow"
+      }
+    }
+  }
+}

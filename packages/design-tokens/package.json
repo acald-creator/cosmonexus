@@ -39,6 +39,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsup",
+		"tokens:generate": "bun scripts/generate.ts",
 		"test": "vitest run",
 		"lint": "biome check .",
 		"typecheck": "tsc --noEmit"
@@ -48,8 +49,10 @@
 	},
 	"devDependencies": {
 		"@cosmonexus/tsconfig": "workspace:*",
+		"@types/bun": "^1.1.14",
 		"@vanilla-extract/css": "^1.15.0",
-		"open-props": "^1.7.0"
+		"open-props": "^1.7.0",
+		"style-dictionary": "^4.2.0"
 	},
 	"publishConfig": {
 		"access": "public"
