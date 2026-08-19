@@ -2,16 +2,29 @@
  * Assemble Script
  * 
  * 1. Moves component files from dist/components/ to dist/
- * 2. Rewrites .css.ts imports in .svelte files to use the pre-compiled styles-runtime.js
- * 3. Removes the raw .css.ts files (consumers don't need them)
+ * 2. Rewrites .css imports in .svelte files to use pre-compiled styles-runtime.js
+ * 3. Removes raw .css.ts files (consumers don't need them)
  */
 
 import { cpSync, existsSync, readdirSync, readFileSync, writeFileSync, rmSync, unlinkSync } from 'node:fs'
-import { resolve, relative, dirname } from 'node:path'
+import { resolve, relative, dirname, basename } from 'node:path'
 
 const ROOT = resolve(import.meta.dirname, '..')
 const DIST = resolve(ROOT, 'dist')
 const COMPONENTS = resolve(DIST, 'components')
+
+// Mapping of component directory names to their namespace export in styles-runtime.js
+const NAMESPACE_MAP = {
+	'Input': 'inputStyles',
+	'Card': 'cardStyles',
+	'Pagination': 'paginationStyles',
+	'DataTable': 'dataTableStyles',
+	'Checkbox': 'checkboxStyles',
+	'Select': 'selectStyles',
+	'Tabs': 'tabsStyles',
+	'Textarea': 'textareaStyles',
+	'Toast': 'toastStyles',
+}
 
 // Step 1: Move component files from dist/components/ up to dist/
 if (existsSync(COMPONENTS)) {
@@ -22,7 +35,6 @@ if (existsSync(COMPONENTS)) {
 			const src = resolve(parentPath, entry.name)
 			const rel = relative(COMPONENTS, src)
 			const dest = resolve(DIST, rel)
-			const destDir = dirname(dest)
 			cpSync(src, dest, { force: true })
 		}
 	}
@@ -30,9 +42,7 @@ if (existsSync(COMPONENTS)) {
 	console.log('✓ Moved components to dist/')
 }
 
-// Step 2: Rewrite .css imports in .svelte files to use styles-runtime
-// The svelte files have: import { buttonRecipe } from './Button.css'
-// We need: import { buttonRecipe } from '../styles-runtime.js'
+// Step 2: Rewrite .css imports in .svelte files
 const svelteFiles = []
 function findSvelteFiles(dir) {
 	for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -46,17 +56,20 @@ findSvelteFiles(DIST)
 for (const file of svelteFiles) {
 	let content = readFileSync(file, 'utf-8')
 	const fileDir = dirname(file)
-	const runtimePath = relative(fileDir, resolve(DIST, 'styles-runtime.js'))
-	const runtimeImport = runtimePath.startsWith('.') ? runtimePath : './' + runtimePath
+	const componentDir = basename(fileDir)
+	const runtimeRel = relative(fileDir, resolve(DIST, 'styles-runtime.js'))
+	const runtimeImport = runtimeRel.startsWith('.') ? runtimeRel : './' + runtimeRel
 
-	// Replace: import { X } from './ComponentName.css'
-	// With:    import { X } from '../styles-runtime.js'
-	content = content.replace(
-		/from\s+['"]\.\/[^'"]+\.css['"]/g,
-		`from '${runtimeImport}'`
-	)
+	// Handle `import * as styles from './X.css'` → remap to namespace
+	const nsExport = NAMESPACE_MAP[componentDir]
+	if (nsExport) {
+		content = content.replace(
+			/import\s+\*\s+as\s+styles\s+from\s+['"]\.\/[^'"]+\.css['"]/g,
+			`import { ${nsExport} as styles } from '${runtimeImport}'`
+		)
+	}
 
-	// Replace: import * as X from './ComponentName.css'
+	// Handle `import { X } from './Y.css'` → named imports from runtime
 	content = content.replace(
 		/from\s+['"]\.\/[^'"]+\.css['"]/g,
 		`from '${runtimeImport}'`
@@ -66,7 +79,7 @@ for (const file of svelteFiles) {
 }
 console.log(`✓ Rewrote imports in ${svelteFiles.length} .svelte files`)
 
-// Step 3: Remove raw .css.ts/.css.js/.css.d.ts files (not needed by consumers)
+// Step 3: Remove raw .css.ts/.css.js/.css.d.ts files
 function removeVeFiles(dir) {
 	for (const entry of readdirSync(dir, { withFileTypes: true })) {
 		const full = resolve(dir, entry.name)
@@ -89,4 +102,4 @@ for (const file of required) {
 	}
 }
 
-console.log('\n✓ Assembly complete — consumers import components + styles.css')
+console.log('\n✓ Assembly complete')
