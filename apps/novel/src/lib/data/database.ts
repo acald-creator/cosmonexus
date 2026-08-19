@@ -1,5 +1,6 @@
 import { createRxDatabase, addRxPlugin, type RxDatabase } from 'rxdb'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
+import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 import {
 	novelSchema, chapterSchema, progressSchema, authorSchema,
@@ -33,6 +34,7 @@ export async function getDatabase(): Promise<AppDatabase> {
 }
 
 async function initDatabase(): Promise<AppDatabase> {
+	addRxPlugin(RxDBDevModePlugin)
 	addRxPlugin(RxDBMigrationSchemaPlugin)
 
 	const db = await createRxDatabase<AppCollections>({
