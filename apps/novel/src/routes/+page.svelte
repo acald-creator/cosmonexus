@@ -6,7 +6,7 @@
 	import CollectionShelf from '$lib/components/CollectionShelf.svelte'
 	import CoverGrid from '$lib/components/CoverGrid.svelte'
 	import SmartCTA from '$lib/components/SmartCTA.svelte'
-	import { listNovels } from '$lib/data/novels'
+	import { novels$ } from '$lib/data/reactive'
 	import { getNewThisWeek, getStaffPicks, getCompletedSeries, getRisingAuthors } from '$lib/data/collections'
 	import { formatReadingTime, getPublishedWordCount } from '$lib/data/reading-time'
 	import type { NovelMeta } from '@cosmonexus/nova-types'
@@ -15,7 +15,8 @@
 	let selectedGenre = $state<string | null>(null)
 
 	onMount(() => {
-		novels = listNovels()
+		const sub = novels$().subscribe(n => { novels = n })
+		return () => sub.unsubscribe()
 	})
 
 	const availableGenres = $derived([...new Set(novels.map(n => n.genre).filter(Boolean))] as string[])

@@ -2,14 +2,15 @@
 	import { onMount } from 'svelte'
 	import Header from '$lib/components/Header.svelte'
 	import Sidebar from '$lib/components/Sidebar.svelte'
-	import { listNovels, getNovelWordCount } from '$lib/data/novels'
+	import { novels$ } from '$lib/data/reactive'
 	import type { NovelMeta } from '@cosmonexus/nova-types'
 
 	let novels = $state<NovelMeta[]>([])
 	let totalWords = $derived(novels.reduce((sum, n) => sum + n.chapters.reduce((s, ch) => s + ch.wordCount, 0), 0))
 
 	onMount(() => {
-		novels = listNovels()
+		const sub = novels$().subscribe(n => { novels = n })
+		return () => sub.unsubscribe()
 	})
 
 	// Collect recent chapters across all books

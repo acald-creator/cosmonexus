@@ -7,15 +7,15 @@
 	import SocialProof from '$lib/components/SocialProof.svelte'
 	import ChapterProgressIndicator from '$lib/components/ChapterProgressIndicator.svelte'
 	import RelatedNovels from '$lib/components/RelatedNovels.svelte'
-	import { getNovel, listNovels } from '$lib/data/novels'
-	import { getProgress } from '$lib/data/reading-progress'
+	import { novel$, novels$ } from '$lib/data/reactive'
+	import { progress$ } from '$lib/data/reactive'
 	import { formatReadingTime, getPublishedWordCount, computeUpdateFrequency } from '$lib/data/reading-time'
 	import type { NovelMeta } from '@cosmonexus/nova-types'
 
 	const novelId = $derived($page.params.id)
 	let novel = $state<NovelMeta | null>(null)
 	let allNovels = $state<NovelMeta[]>([])
-	let progress = $derived(novel ? getProgress(novel.id) : null)
+	let progress = $state(null as any)
 	let publishedChapters = $derived(
 		novel?.chapters.filter(ch => ch.status === 'final' || ch.status === 'editing').sort((a, b) => a.order - b.order) ?? []
 	)
@@ -24,8 +24,10 @@
 	let updateFreq = $derived(novel ? computeUpdateFrequency(novel) : null)
 
 	onMount(() => {
-		novel = getNovel(novelId)
-		allNovels = listNovels()
+		const sub1 = novel$(novelId).subscribe(n => { novel = n })
+		const sub2 = novels$().subscribe(n => { allNovels = n })
+		const sub3 = progress$(novelId).subscribe(p => { progress = p })
+		return () => { sub1.unsubscribe(); sub2.unsubscribe(); sub3.unsubscribe() }
 	})
 </script>
 
