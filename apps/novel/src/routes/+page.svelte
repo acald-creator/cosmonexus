@@ -20,7 +20,7 @@
 
 	const availableGenres = $derived([...new Set(novels.map(n => n.genre).filter(Boolean))] as string[])
 	const filteredNovels = $derived(selectedGenre ? novels.filter(n => n.genre === selectedGenre) : novels)
-	const featured = $derived(filteredNovels[0] ?? null)
+	const featured = $derived(novels[0] ?? null)
 	const newThisWeek = $derived(getNewThisWeek(novels))
 	const staffPicks = $derived(getStaffPicks(novels))
 	const completedSeries = $derived(getCompletedSeries(novels))
