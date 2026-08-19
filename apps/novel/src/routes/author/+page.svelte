@@ -90,22 +90,22 @@
 
 	.content {
 		flex: 1;
-		padding: 2rem;
+		padding: var(--spacing-8);
 		overflow-y: auto;
 	}
 
 	.welcome h1 {
-		font-size: 1.5rem;
-		font-weight: 700;
+		font-size: var(--font-size-2xl);
+		font-weight: var(--font-weight-bold);
 	}
 
 	.subtitle {
-		color: var(--muted);
-		margin-top: 0.25rem;
+		color: var(--text-muted);
+		margin-block-start: var(--spacing-1);
 	}
 
 	.subtitle strong {
-		color: var(--primary);
+		color: var(--color-accent-main);
 	}
 
 	.section {
@@ -113,36 +113,36 @@
 	}
 
 	.section h2 {
-		font-size: 1rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-semibold);
+		margin-block-end: var(--spacing-4);
 	}
 
 	.empty {
-		color: var(--muted);
-		font-size: 0.9rem;
+		color: var(--text-muted);
+		font-size: var(--font-size-sm);
 	}
 
 	.chapter-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--spacing-2);
 	}
 
 	.chapter-card {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.75rem 1rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 8px;
+		padding: var(--spacing-3) var(--spacing-4);
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		transition: border-color 0.15s;
+		transition: border-color var(--duration-150) ease;
 	}
 
 	.chapter-card:hover {
-		border-color: var(--primary);
+		border-color: var(--color-accent-main);
 	}
 
 	.chapter-info {
@@ -152,75 +152,75 @@
 	}
 
 	.chapter-book {
-		font-size: 0.7rem;
-		color: var(--muted);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
 
 	.chapter-title {
-		font-size: 0.9rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.chapter-right {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: var(--spacing-3);
 	}
 
 	.status-badge {
-		font-size: 0.7rem;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
+		font-size: var(--font-size-xs);
+		padding: var(--spacing-0-5) var(--spacing-2);
+		border-radius: var(--radius-md);
 		text-transform: capitalize;
 	}
 
-	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--warning); }
-	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--secondary); }
-	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--primary); }
-	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--success); }
+	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--color-warning-text); }
+	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--color-accent-pink); }
+	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--color-accent-main); }
+	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--color-success-text); }
 
 	.chapter-words {
-		font-size: 0.75rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 	}
 
 	.actions-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 1rem;
+		gap: var(--spacing-4);
 	}
 
 	.action-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.3rem;
-		padding: 1.25rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 10px;
+		gap: var(--spacing-1);
+		padding: var(--spacing-5);
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-xl);
 		text-decoration: none;
 		transition: border-color 0.15s, transform 0.15s;
 	}
 
 	.action-card:hover {
-		border-color: var(--primary);
+		border-color: var(--color-accent-main);
 		transform: translateY(-1px);
 	}
 
 	.action-icon {
-		font-size: 1.5rem;
-		margin-bottom: 0.25rem;
+		font-size: var(--font-size-2xl);
+		margin-block-end: var(--spacing-1);
 	}
 
 	.action-card span:nth-child(2) {
-		font-weight: 600;
-		font-size: 0.9rem;
+		font-weight: var(--font-weight-semibold);
+		font-size: var(--font-size-sm);
 	}
 
 	.action-detail {
-		font-size: 0.75rem;
-		color: var(--muted);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
 	}
 </style>

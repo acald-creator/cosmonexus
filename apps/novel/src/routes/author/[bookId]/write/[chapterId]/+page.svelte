@@ -146,25 +146,25 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0.6rem 1.5rem;
-		border-bottom: 1px solid var(--border);
-		background: var(--surface);
+		border-bottom: 1px solid var(--border-light);
+		background: var(--background-surface);
 	}
 
 	.header-left {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
+		gap: var(--spacing-4);
 	}
 
 	.back-link {
-		color: var(--primary);
+		color: var(--color-accent-main);
 		text-decoration: none;
-		font-size: 0.85rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.chapter-info {
-		font-size: 0.9rem;
-		font-weight: 600;
+		font-size: var(--font-size-sm);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.status-wrapper {
@@ -172,19 +172,19 @@
 	}
 
 	.status-badge {
-		font-size: 0.7rem;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
+		font-size: var(--font-size-xs);
+		padding: var(--spacing-0-5) var(--spacing-2);
+		border-radius: var(--radius-md);
 		border: 1px solid transparent;
 		cursor: pointer;
 		text-transform: capitalize;
-		transition: all 0.15s;
+		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
 	}
 
-	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--warning); }
-	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--secondary); }
-	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--primary); }
-	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--success); }
+	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--color-warning-text); }
+	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--color-accent-pink); }
+	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--color-accent-main); }
+	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--color-success-text); }
 
 	.status-badge:hover {
 		border-color: currentColor;
@@ -194,10 +194,10 @@
 		position: absolute;
 		top: 100%;
 		left: 0;
-		margin-top: 0.25rem;
-		background: var(--surface-raised);
-		border: 1px solid var(--border);
-		border-radius: 6px;
+		margin-block-start: var(--spacing-1);
+		background: var(--background-muted);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-md);
 		padding: 0.25rem;
 		z-index: 50;
 		min-width: 160px;
@@ -210,41 +210,41 @@
 		padding: 0.4rem 0.6rem;
 		border: none;
 		background: transparent;
-		color: var(--text);
-		font-size: 0.8rem;
-		border-radius: 4px;
+		color: var(--text-primary);
+		font-size: var(--font-size-sm);
+		border-radius: var(--radius-md);
 		cursor: pointer;
 	}
 
 	.status-option:hover {
-		background: var(--surface);
+		background: var(--background-surface);
 	}
 
 	.header-right {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--spacing-2);
 	}
 
 	.save-btn {
-		padding: 0.4rem 0.9rem;
-		border-radius: 6px;
-		border: 1px solid var(--border);
+		padding: var(--spacing-1-5) var(--spacing-4);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border-light);
 		background: transparent;
-		color: var(--text-dim);
-		font-size: 0.8rem;
+		color: var(--text-secondary);
+		font-size: var(--font-size-sm);
 		cursor: pointer;
-		transition: all 0.15s;
+		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
 	}
 
 	.save-btn:hover {
-		border-color: var(--primary);
-		color: var(--primary);
+		border-color: var(--color-accent-main);
+		color: var(--color-accent-main);
 	}
 
 	.toolbar {
 		padding: 0.4rem 1.5rem;
-		border-bottom: 1px solid var(--border);
-		background: var(--surface);
+		border-bottom: 1px solid var(--border-light);
+		background: var(--background-surface);
 	}
 
 	.format-group {
@@ -259,23 +259,23 @@
 		border-radius: 5px;
 		border: none;
 		background: transparent;
-		color: var(--text-dim);
+		color: var(--text-secondary);
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 0.85rem;
+		font-size: var(--font-size-sm);
 		transition: background 0.15s;
 	}
 
 	.tb:hover {
-		background: var(--surface-raised);
+		background: var(--background-muted);
 	}
 
 	.tb-divider {
 		width: 1px;
 		height: 18px;
-		background: var(--border);
+		background: var(--border-light);
 		margin: 0 0.3rem;
 	}
 
@@ -288,7 +288,7 @@
 	}
 
 	.editor-area.focused {
-		border-left-color: var(--primary);
+		border-left-color: var(--color-accent-main);
 	}
 
 	.editor-area :global(.nova-rich-editor) {
@@ -298,11 +298,11 @@
 	}
 
 	.editor-area :global(.ProseMirror) {
-		font-family: var(--font-serif);
-		font-size: 1.15rem;
+		font-family: var(--font-family-display);
+		font-size: var(--font-size-lg);
 		line-height: 1.9;
-		color: var(--text-dim);
-		padding: 3rem 2rem;
+		color: var(--text-secondary);
+		padding: var(--spacing-12) var(--spacing-8);
 		min-height: calc(100vh - 180px);
 	}
 
@@ -313,17 +313,17 @@
 	.editor-area :global(.ProseMirror h1),
 	.editor-area :global(.ProseMirror h2),
 	.editor-area :global(.ProseMirror h3) {
-		font-family: var(--font-sans);
-		color: var(--text);
+		font-family: var(--font-family-sans);
+		color: var(--text-primary);
 	}
 
 	.editor-area :global(.ProseMirror blockquote) {
-		border-left-color: var(--secondary);
-		color: var(--text-dim);
+		border-left-color: var(--color-accent-pink);
+		color: var(--text-secondary);
 	}
 
 	.editor-area :global(.novel-placeholder::before) {
-		color: var(--muted);
+		color: var(--text-muted);
 	}
 
 	.editor-footer {
@@ -331,43 +331,43 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem 1.5rem;
-		border-top: 1px solid var(--border);
-		background: var(--surface);
-		font-size: 0.8rem;
-		color: var(--muted);
+		border-top: 1px solid var(--border-light);
+		background: var(--background-surface);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
 	}
 
 	.footer-left {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
-		font-family: var(--font-mono);
+		gap: var(--spacing-3);
+		font-family: var(--font-family-mono);
 	}
 
 	.mini-progress {
 		width: 80px;
 		height: 4px;
-		background: var(--bg);
+		background: var(--background-body);
 		border-radius: 2px;
 		overflow: hidden;
 	}
 
 	.mini-fill {
 		height: 100%;
-		background: var(--primary);
+		background: var(--color-accent-main);
 		border-radius: 2px;
 		transition: width 0.3s;
 	}
 
 	.percent {
-		font-size: 0.75rem;
+		font-size: var(--font-size-xs);
 	}
 
 	.saved {
-		color: var(--success);
+		color: var(--color-success-text);
 	}
 
 	.unsaved {
-		color: var(--muted);
+		color: var(--text-muted);
 	}
 </style>

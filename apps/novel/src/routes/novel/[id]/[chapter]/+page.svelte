@@ -135,89 +135,89 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0.75rem 2rem;
-		border-bottom: 1px solid var(--border);
-		background: var(--surface);
+		padding: var(--spacing-3) var(--spacing-8);
+		border-bottom: 1px solid var(--border-light);
+		background: var(--background-surface);
 		position: sticky;
 		top: 0;
 		z-index: 100;
 	}
 
 	.back-link {
-		color: var(--primary);
+		color: var(--color-accent-main);
 		text-decoration: none;
-		font-size: 0.85rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.novel-title {
-		font-size: 0.85rem;
-		color: var(--muted);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
 	}
 
 	.reader-controls {
 		display: flex;
-		gap: 0.25rem;
+		gap: var(--spacing-1);
 	}
 
 	.control-btn {
 		width: 32px;
 		height: 32px;
-		border-radius: 6px;
-		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border-light);
 		background: transparent;
-		color: var(--text-dim);
+		color: var(--text-secondary);
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 0.8rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.control-btn:hover {
-		background: var(--surface-raised);
+		background: var(--background-muted);
 	}
 
 	.reader {
 		max-width: 680px;
 		margin: 0 auto;
-		padding: 3rem 2rem;
+		padding: var(--spacing-12) var(--spacing-8);
 	}
 
 	.not-found {
-		color: var(--muted);
+		color: var(--text-muted);
 		text-align: center;
 		padding: 4rem 0;
 	}
 
 	.not-found a {
-		color: var(--primary);
+		color: var(--color-accent-main);
 		text-decoration: none;
 	}
 
 	.chapter-heading {
 		text-align: center;
-		margin-bottom: 3rem;
+		margin-block-end: var(--spacing-12);
 	}
 
 	.chapter-label {
-		font-size: 0.8rem;
+		font-size: var(--font-size-sm);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		color: var(--muted);
+		color: var(--text-muted);
 	}
 
 	.chapter-heading h1 {
-		font-size: 2rem;
-		font-weight: 700;
-		font-family: var(--font-serif);
-		margin-top: 0.25rem;
+		font-size: var(--font-size-4xl);
+		font-weight: var(--font-weight-bold);
+		font-family: var(--font-family-display);
+		margin-block-start: var(--spacing-1);
 	}
 
 	.prose {
-		font-family: var(--font-serif);
-		font-size: 1.15rem;
+		font-family: var(--font-family-display);
+		font-size: var(--font-size-lg);
 		line-height: 1.9;
-		color: var(--text-dim);
+		color: var(--text-secondary);
 	}
 
 	.prose :global(p) {
@@ -230,23 +230,23 @@
 	}
 
 	.prose :global(h1), .prose :global(h2), .prose :global(h3) {
-		font-family: var(--font-sans);
-		color: var(--text);
+		font-family: var(--font-family-sans);
+		color: var(--text-primary);
 		margin: 2em 0 0.5em;
 		text-indent: 0;
 	}
 
 	.prose :global(blockquote) {
-		border-left: 3px solid var(--secondary);
+		border-left: 3px solid var(--color-accent-pink);
 		padding-left: 1em;
-		color: var(--text-dim);
+		color: var(--text-secondary);
 		font-style: italic;
 		margin: 1.5em 0;
 	}
 
 	.prose :global(hr) {
 		border: none;
-		border-top: 1px solid var(--border);
+		border-top: 1px solid var(--border-light);
 		margin: 2.5em auto;
 		width: 40%;
 	}
@@ -255,34 +255,34 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 2rem 0;
-		margin-top: 3rem;
-		border-top: 1px solid var(--border);
+		padding-block: var(--spacing-8);
+		margin-block-start: var(--spacing-12);
+		border-top: 1px solid var(--border-light);
 	}
 
 	.nav-btn {
-		padding: 0.5rem 1rem;
-		border-radius: 6px;
-		border: 1px solid var(--border);
+		padding: var(--spacing-2) var(--spacing-4);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border-light);
 		text-decoration: none;
-		font-size: 0.85rem;
-		color: var(--text-dim);
-		transition: all 0.15s;
+		font-size: var(--font-size-sm);
+		color: var(--text-secondary);
+		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
 	}
 
 	.nav-btn:hover {
-		border-color: var(--primary);
-		color: var(--primary);
+		border-color: var(--color-accent-main);
+		color: var(--color-accent-main);
 	}
 
 	.nav-btn.end {
-		color: var(--muted);
+		color: var(--text-muted);
 		border-color: transparent;
 	}
 
 	.chapter-progress {
-		font-size: 0.8rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 	}
 </style>

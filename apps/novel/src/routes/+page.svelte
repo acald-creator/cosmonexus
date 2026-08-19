@@ -77,158 +77,158 @@
 	.library {
 		max-width: 1000px;
 		margin: 0 auto;
-		padding: 2rem;
+		padding: var(--spacing-8);
 	}
 
 	.hero {
 		text-align: center;
-		padding: 3rem 0 2rem;
+		padding-block: var(--spacing-12) var(--spacing-8);
 	}
 
 	.hero h1 {
-		font-size: 2.5rem;
-		font-weight: 800;
-		margin-bottom: 0.5rem;
+		font-size: var(--font-size-5xl);
+		font-weight: var(--font-weight-extrabold);
+		margin-block-end: var(--spacing-2);
 	}
 
 	.hero p {
-		color: var(--muted);
-		font-size: 1.1rem;
+		color: var(--text-muted);
+		font-size: var(--font-size-lg);
 	}
 
 	.section {
-		margin-bottom: 3rem;
+		margin-block-end: var(--spacing-12);
 	}
 
 	.section-title {
-		font-size: 1.1rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
-		color: var(--text-dim);
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-semibold);
+		margin-block-end: var(--spacing-4);
+		color: var(--text-secondary);
 	}
 
 	.empty {
-		color: var(--muted);
+		color: var(--text-muted);
 	}
 
 	.empty a {
-		color: var(--primary);
+		color: var(--color-accent-main);
 		text-decoration: none;
 	}
 
 	.book-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 1.5rem;
+		gap: var(--spacing-6);
 	}
 
 	.book-card {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		padding: 1.25rem;
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-xl);
+		padding: var(--spacing-5);
 		text-decoration: none;
 		transition: border-color 0.15s, transform 0.15s;
 	}
 
 	.book-card:hover {
-		border-color: var(--primary);
+		border-color: var(--color-accent-main);
 		transform: translateY(-2px);
 	}
 
 	.book-cover {
 		height: 120px;
-		background: var(--surface-raised);
-		border-radius: 8px;
+		background: var(--background-muted);
+		border-radius: var(--radius-lg);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 1rem;
-		font-size: 2.5rem;
+		margin-block-end: var(--spacing-4);
+		font-size: var(--font-size-5xl);
 	}
 
 	.book-card .book-title {
-		font-size: 0.95rem;
-		font-weight: 600;
-		margin-bottom: 0.25rem;
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-semibold);
+		margin-block-end: var(--spacing-1);
 	}
 
 	.book-author {
-		font-size: 0.8rem;
-		color: var(--muted);
-		margin-bottom: 0.5rem;
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
+		margin-block-end: var(--spacing-2);
 	}
 
 	.book-meta {
 		display: flex;
-		gap: 0.5rem;
-		font-size: 0.75rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		gap: var(--spacing-2);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 	}
 
 	.genre-tag {
-		background: var(--primary-dim);
-		color: var(--primary);
-		padding: 0.1rem 0.4rem;
-		border-radius: 4px;
+		background: var(--color-accent-soft);
+		color: var(--color-accent-main);
+		padding: var(--spacing-0-5) var(--spacing-1-5);
+		border-radius: var(--radius-md);
 	}
 
 	.genre-list {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--spacing-2);
 	}
 
 	.genre-pill {
-		padding: 0.4rem 1rem;
-		border-radius: 20px;
-		border: 1px solid var(--border);
+		padding: var(--spacing-1-5) var(--spacing-4);
+		border-radius: var(--radius-full);
+		border: 1px solid var(--border-light);
 		background: transparent;
-		font-size: 0.85rem;
-		color: var(--text-dim);
+		font-size: var(--font-size-sm);
+		color: var(--text-secondary);
 		cursor: pointer;
-		transition: all 0.15s;
+		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
 	}
 
 	.genre-pill:hover {
-		border-color: var(--primary);
-		color: var(--primary);
-		background: var(--primary-dim);
+		border-color: var(--color-accent-main);
+		color: var(--color-accent-main);
+		background: var(--color-accent-soft);
 	}
 
 	.updates-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--spacing-2);
 	}
 
 	.update-card {
 		display: block;
-		padding: 1rem 1.25rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 8px;
+		padding: var(--spacing-4) var(--spacing-5);
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		transition: border-color 0.15s;
+		transition: border-color var(--duration-150) ease;
 	}
 
 	.update-card:hover {
-		border-color: var(--primary);
+		border-color: var(--color-accent-main);
 	}
 
 	.update-info {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--spacing-1);
 	}
 
 	.update-title {
-		font-size: 0.9rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.update-meta {
-		font-size: 0.8rem;
-		color: var(--muted);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
 	}
 </style>

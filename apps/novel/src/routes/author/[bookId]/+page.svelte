@@ -105,15 +105,15 @@
 	.book-page {
 		max-width: 900px;
 		margin: 0 auto;
-		padding: 2rem;
+		padding: var(--spacing-8);
 	}
 
 	.not-found, .empty {
-		color: var(--muted);
+		color: var(--text-muted);
 	}
 
 	.not-found a {
-		color: var(--primary);
+		color: var(--color-accent-main);
 		text-decoration: none;
 	}
 
@@ -121,32 +121,32 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		margin-bottom: 2rem;
+		margin-block-end: var(--spacing-8);
 	}
 
 	.genre-tag {
-		font-size: 0.7rem;
-		background: var(--primary-dim);
-		color: var(--primary);
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
+		font-size: var(--font-size-xs);
+		background: var(--color-accent-soft);
+		color: var(--color-accent-main);
+		padding: var(--spacing-0-5) var(--spacing-2);
+		border-radius: var(--radius-md);
 	}
 
 	.book-header h1 {
-		font-size: 1.75rem;
-		font-weight: 800;
-		margin-top: 0.25rem;
+		font-size: var(--font-size-3xl);
+		font-weight: var(--font-weight-extrabold);
+		margin-block-start: var(--spacing-1);
 	}
 
 	.write-btn {
-		padding: 0.6rem 1.25rem;
-		background: var(--primary);
-		color: var(--bg);
-		border-radius: 8px;
+		padding: var(--spacing-2-5) var(--spacing-5);
+		background: var(--color-accent-main);
+		color: var(--background-body);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		font-weight: 600;
-		font-size: 0.85rem;
-		transition: opacity 0.15s;
+		font-weight: var(--font-weight-semibold);
+		font-size: var(--font-size-sm);
+		transition: opacity var(--duration-150) ease;
 	}
 
 	.write-btn:hover {
@@ -155,73 +155,73 @@
 
 	.stats-row {
 		display: flex;
-		gap: 1rem;
-		margin-bottom: 1.5rem;
+		gap: var(--spacing-4);
+		margin-block-end: var(--spacing-6);
 	}
 
 	.stat-card {
 		flex: 1;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		padding: 1rem;
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-lg);
+		padding: var(--spacing-4);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.25rem;
+		gap: var(--spacing-1);
 	}
 
 	.stat-value {
-		font-weight: 700;
-		font-family: var(--font-mono);
-		font-size: 1rem;
+		font-weight: var(--font-weight-bold);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-base);
 	}
 
 	.stat-label {
-		font-size: 0.7rem;
-		color: var(--muted);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
 
 	.progress-section {
-		margin-bottom: 2rem;
-		padding: 1rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 8px;
+		margin-block-end: var(--spacing-8);
+		padding: var(--spacing-4);
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-lg);
 	}
 
 	.chapters-section {
-		margin-top: 1rem;
+		margin-block-start: var(--spacing-4);
 	}
 
 	.chapters-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 1rem;
+		margin-block-end: var(--spacing-4);
 	}
 
 	.chapters-header h2 {
-		font-size: 1rem;
-		font-weight: 600;
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-semibold);
 	}
 
 	.add-chapter-btn {
-		padding: 0.4rem 0.8rem;
-		border-radius: 6px;
-		border: 1px dashed var(--border);
+		padding: var(--spacing-1-5) var(--spacing-3);
+		border-radius: var(--radius-md);
+		border: 1px dashed var(--border-light);
 		background: transparent;
-		color: var(--muted);
-		font-size: 0.8rem;
+		color: var(--text-muted);
+		font-size: var(--font-size-sm);
 		cursor: pointer;
-		transition: all 0.15s;
+		transition: border-color var(--duration-150) ease, color var(--duration-150) ease;
 	}
 
 	.add-chapter-btn:hover {
-		border-color: var(--primary);
-		color: var(--primary);
+		border-color: var(--color-accent-main);
+		color: var(--color-accent-main);
 	}
 
 	.chapters-table {
@@ -231,52 +231,52 @@
 
 	.chapters-table th {
 		text-align: left;
-		font-size: 0.7rem;
+		font-size: var(--font-size-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: var(--muted);
-		padding: 0.5rem 0.75rem;
-		border-bottom: 1px solid var(--border);
+		color: var(--text-muted);
+		padding: var(--spacing-2) var(--spacing-3);
+		border-bottom: 1px solid var(--border-light);
 	}
 
 	.chapters-table td {
 		padding: 0.65rem 0.75rem;
-		border-bottom: 1px solid var(--border);
-		font-size: 0.85rem;
+		border-bottom: 1px solid var(--border-light);
+		font-size: var(--font-size-sm);
 	}
 
 	.chapters-table tbody tr:hover {
-		background: var(--surface);
+		background: var(--background-surface);
 	}
 
 	.col-num {
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
-		color: var(--muted);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
 		width: 3rem;
 	}
 
 	.col-words {
-		font-family: var(--font-mono);
-		font-size: 0.8rem;
-		color: var(--muted);
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
 	}
 
 	.status-badge {
-		font-size: 0.7rem;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
+		font-size: var(--font-size-xs);
+		padding: var(--spacing-0-5) var(--spacing-2);
+		border-radius: var(--radius-md);
 		text-transform: capitalize;
 	}
 
-	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--warning); }
-	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--secondary); }
-	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--primary); }
-	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--success); }
+	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--color-warning-text); }
+	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--color-accent-pink); }
+	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--color-accent-main); }
+	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--color-success-text); }
 
 	.edit-link {
-		font-size: 0.8rem;
-		color: var(--primary);
+		font-size: var(--font-size-sm);
+		color: var(--color-accent-main);
 		text-decoration: none;
 	}
 

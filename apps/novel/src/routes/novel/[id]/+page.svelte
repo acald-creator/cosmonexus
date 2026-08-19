@@ -64,32 +64,32 @@
 	.novel-page {
 		max-width: 800px;
 		margin: 0 auto;
-		padding: 2rem;
+		padding: var(--spacing-8);
 	}
 
 	.not-found {
-		color: var(--muted);
+		color: var(--text-muted);
 		text-align: center;
 		padding: 4rem 0;
 	}
 
 	.not-found a {
-		color: var(--primary);
+		color: var(--color-accent-main);
 		text-decoration: none;
 	}
 
 	.novel-header {
 		display: flex;
-		gap: 2rem;
-		margin-bottom: 3rem;
+		gap: var(--spacing-8);
+		margin-block-end: var(--spacing-12);
 		align-items: flex-start;
 	}
 
 	.novel-cover {
 		width: 160px;
 		height: 220px;
-		background: var(--surface-raised);
-		border-radius: 12px;
+		background: var(--background-muted);
+		border-radius: var(--radius-xl);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -100,54 +100,54 @@
 	.novel-info {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--spacing-2);
 	}
 
 	.genre-tag {
-		font-size: 0.75rem;
-		background: var(--primary-dim);
-		color: var(--primary);
-		padding: 0.2rem 0.6rem;
-		border-radius: 4px;
+		font-size: var(--font-size-xs);
+		background: var(--color-accent-soft);
+		color: var(--color-accent-main);
+		padding: var(--spacing-0-5) var(--spacing-2-5);
+		border-radius: var(--radius-md);
 		width: fit-content;
 	}
 
 	.novel-info h1 {
-		font-size: 2rem;
-		font-weight: 800;
+		font-size: var(--font-size-4xl);
+		font-weight: var(--font-weight-extrabold);
 	}
 
 	.author {
-		color: var(--muted);
-		font-size: 0.95rem;
+		color: var(--text-muted);
+		font-size: var(--font-size-base);
 	}
 
 	.synopsis {
-		color: var(--text-dim);
+		color: var(--text-secondary);
 		line-height: 1.7;
 		margin: 0.5rem 0;
 	}
 
 	.novel-stats {
 		display: flex;
-		gap: 1.25rem;
-		font-size: 0.8rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		gap: var(--spacing-5);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 	}
 
 	.start-btn {
 		display: inline-block;
-		margin-top: 1rem;
-		padding: 0.7rem 1.5rem;
-		background: var(--primary);
-		color: var(--bg);
-		border-radius: 8px;
+		margin-block-start: var(--spacing-4);
+		padding: var(--spacing-3) var(--spacing-6);
+		background: var(--color-accent-main);
+		color: var(--background-body);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		font-weight: 600;
-		font-size: 0.9rem;
+		font-weight: var(--font-weight-semibold);
+		font-size: var(--font-size-sm);
 		width: fit-content;
-		transition: opacity 0.15s;
+		transition: opacity var(--duration-150) ease;
 	}
 
 	.start-btn:hover {
@@ -155,48 +155,48 @@
 	}
 
 	.chapters-section h2 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		margin-bottom: 1rem;
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-semibold);
+		margin-block-end: var(--spacing-4);
 	}
 
 	.chapter-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--spacing-1);
 	}
 
 	.chapter-row {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
-		padding: 0.75rem 1rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 8px;
+		gap: var(--spacing-4);
+		padding: var(--spacing-3) var(--spacing-4);
+		background: var(--background-surface);
+		border: 1px solid var(--border-light);
+		border-radius: var(--radius-lg);
 		text-decoration: none;
-		transition: border-color 0.15s;
+		transition: border-color var(--duration-150) ease;
 	}
 
 	.chapter-row:hover {
-		border-color: var(--primary);
+		border-color: var(--color-accent-main);
 	}
 
 	.chapter-num {
-		font-size: 0.8rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		font-size: var(--font-size-sm);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 		width: 2ch;
 	}
 
 	.chapter-title {
 		flex: 1;
-		font-size: 0.9rem;
+		font-size: var(--font-size-sm);
 	}
 
 	.chapter-words {
-		font-size: 0.75rem;
-		color: var(--muted);
-		font-family: var(--font-mono);
+		font-size: var(--font-size-xs);
+		color: var(--text-muted);
+		font-family: var(--font-family-mono);
 	}
 </style>
