@@ -44,15 +44,11 @@
         "@cosmonexus/nova-store": "workspace:*",
         "@cosmonexus/nova-svelte": "workspace:*",
         "@cosmonexus/nova-types": "workspace:*",
-        "@cosmonexus/nova-ui-svelte": "workspace:*",
         "@cosmonexus/prose": "workspace:*",
         "@cosmonexus/tsconfig": "workspace:*",
         "@sveltejs/adapter-static": "^3.0.0",
         "@sveltejs/kit": "^2.0.0",
         "@sveltejs/vite-plugin-svelte": "^4.0.0",
-        "@vanilla-extract/css": "^1.15.0",
-        "@vanilla-extract/recipes": "^0.5.0",
-        "@vanilla-extract/vite-plugin": "^4.0.0",
         "rxjs": "^7.8.0",
         "svelte": "^5.0.0",
         "svelte-check": "^4.0.0",
@@ -99,7 +95,7 @@
     },
     "packages/cm": {
       "name": "@cosmonexus/cm",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "dependencies": {
         "@codemirror/language": "^6.9.0",
         "@codemirror/legacy-modes": "^6.3.3",
@@ -128,7 +124,7 @@
     },
     "packages/nova-react": {
       "name": "@cosmonexus/nova-react",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "dependencies": {
         "@cosmonexus/nova-store": "workspace:*",
         "@cosmonexus/nova-types": "workspace:*",
@@ -146,7 +142,7 @@
     },
     "packages/nova-store": {
       "name": "@cosmonexus/nova-store",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "dependencies": {
         "@cosmonexus/nova-types": "workspace:*",
       },
@@ -160,7 +156,7 @@
     },
     "packages/nova-svelte": {
       "name": "@cosmonexus/nova-svelte",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "dependencies": {
         "@cosmonexus/cm": "workspace:*",
         "@cosmonexus/nova-store": "workspace:*",
@@ -184,7 +180,7 @@
     },
     "packages/nova-types": {
       "name": "@cosmonexus/nova-types",
-      "version": "0.6.0",
+      "version": "0.6.1",
       "devDependencies": {
         "@cosmonexus/tsconfig": "workspace:*",
       },
@@ -273,7 +269,7 @@
     },
     "packages/stellate": {
       "name": "@cosmonexus/stellate",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "dependencies": {
         "@cosmonexus/cm": "workspace:*",
       },
