@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/design-tokens",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -32,7 +32,10 @@
 			"require": "./dist/global.css.cjs"
 		}
 	},
-	"files": ["dist/**", "src/**"],
+	"files": [
+		"dist/**",
+		"src/**"
+	],
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsup",

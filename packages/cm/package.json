@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/cm",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"type": "module",
 	"exports": {
 		"./core": {
@@ -34,7 +34,9 @@
 			"require": "./dist/view/index.cjs"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsdown",
 		"test": "vitest run",

@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-svelte",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
 	"svelte": "./dist/index.js",
 	"exports": {
@@ -10,7 +10,9 @@
 			"import": "./dist/index.js"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "svelte-package",
 		"test": "vitest run",

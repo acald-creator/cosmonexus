@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-react",
-	"version": "0.2.15",
+	"version": "0.3.0",
 	"type": "module",
 	"exports": {
 		".": {
@@ -9,7 +9,9 @@
 			"require": "./dist/index.cjs"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsdown",
 		"test": "vitest run",

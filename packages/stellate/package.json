@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/stellate",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"type": "module",
 	"exports": {
 		".": {
@@ -9,7 +9,9 @@
 			"require": "./dist/index.cjs"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsdown",
 		"test": "vitest run",

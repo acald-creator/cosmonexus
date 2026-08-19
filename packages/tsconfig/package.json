@@ -1,7 +1,11 @@
 {
 	"name": "@cosmonexus/tsconfig",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
-	"files": ["*.json"],
-	"publishConfig": { "access": "public" }
+	"files": [
+		"*.json"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
 }

@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/prose",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
 	"exports": {
 		".": {
@@ -9,7 +9,9 @@
 			"require": "./dist/index.cjs"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsup",
 		"test": "vitest run",
