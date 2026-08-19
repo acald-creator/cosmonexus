@@ -1,6 +1,7 @@
 import { createRxDatabase, addRxPlugin, type RxDatabase } from 'rxdb'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema'
 import {
 	novelSchema, chapterSchema, progressSchema, authorSchema,
@@ -19,10 +20,6 @@ export type AppDatabase = RxDatabase<AppCollections>
 
 let dbPromise: Promise<AppDatabase> | null = null
 
-/**
- * Returns the singleton RxDB instance. Created lazily on first call.
- * Throws if called outside the browser.
- */
 export async function getDatabase(): Promise<AppDatabase> {
 	if (typeof window === 'undefined') {
 		throw new Error('[data] RxDB cannot be initialized outside the browser.')
@@ -39,7 +36,7 @@ async function initDatabase(): Promise<AppDatabase> {
 
 	const db = await createRxDatabase<AppCollections>({
 		name: 'cosmonexus-novel',
-		storage: getRxStorageDexie(),
+		storage: wrappedValidateAjvStorage({ storage: getRxStorageDexie() }),
 		multiInstance: true,
 		eventReduce: true,
 	})
@@ -51,7 +48,6 @@ async function initDatabase(): Promise<AppDatabase> {
 		authors: { schema: authorSchema, migrationStrategies: {} },
 	})
 
-	// Migrate existing localStorage data (one-time)
 	await migrateFromLocalStorage(db)
 
 	return db
