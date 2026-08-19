@@ -103,3 +103,13 @@ for (const file of required) {
 }
 
 console.log('\n✓ Assembly complete')
+
+// Step 4: Append theme exports to index.js
+const indexPath = resolve(DIST, 'index.js')
+if (existsSync(indexPath)) {
+	const indexContent = readFileSync(indexPath, 'utf-8')
+	if (!indexContent.includes('darkTheme')) {
+		writeFileSync(indexPath, indexContent + "\nexport { darkTheme, lightTheme } from './styles-runtime.js'\n")
+		console.log('✓ Added theme exports to index.js')
+	}
+}
