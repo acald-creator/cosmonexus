@@ -4,7 +4,8 @@
 	import { RichEditor } from '@cosmonexus/nova-svelte'
 	import { getNovel } from '$lib/data/novels'
 	import { getChapterMeta, getChapterContent, saveChapterContent } from '$lib/data/chapters'
-	import type { ChapterMeta, DocumentJSON } from '@cosmonexus/nova-types'
+	import { transitionChapter, getNextStatuses, STATUS_META } from '$lib/data/publishing'
+	import type { ChapterMeta, ChapterStatus, DocumentJSON } from '@cosmonexus/nova-types'
 
 	const bookId = $derived($page.params.bookId)
 	const chapterId = $derived($page.params.chapterId)
@@ -16,11 +17,16 @@
 	let isFocused = $state(false)
 	let editorRef = $state<any>(undefined)
 	let novelTitle = $state('')
+	let showStatusMenu = $state(false)
 
 	let percentage = $derived(
 		chapterMeta?.targetWordCount
 			? Math.min(100, Math.round((wordCount.words / chapterMeta.targetWordCount) * 100))
 			: 0
+	)
+
+	let nextStatuses = $derived(
+		chapterMeta ? getNextStatuses(chapterMeta.status) : []
 	)
 
 	onMount(() => {
@@ -49,6 +55,14 @@
 		lastSaved = new Date().toLocaleTimeString()
 	}
 
+	function changeStatus(newStatus: ChapterStatus) {
+		const result = transitionChapter(bookId, chapterId, newStatus)
+		if (result) {
+			chapterMeta = getChapterMeta(bookId, chapterId)
+		}
+		showStatusMenu = false
+	}
+
 	function toggleBold() { editorRef?.toggleBold(); editorRef?.focus() }
 	function toggleItalic() { editorRef?.toggleItalic(); editorRef?.focus() }
 	function toggleUnderline() { editorRef?.toggleUnderline(); editorRef?.focus() }
@@ -60,7 +74,23 @@
 		<a href="/author/{bookId}" class="back-link">← Back</a>
 		{#if chapterMeta}
 			<span class="chapter-info">Ch {chapterMeta.order}: {chapterMeta.title}</span>
-			<span class="status-badge {chapterMeta.status}">{chapterMeta.status}</span>
+			<div class="status-wrapper">
+				<button
+					class="status-badge {chapterMeta.status}"
+					onclick={() => showStatusMenu = !showStatusMenu}
+				>
+					{STATUS_META[chapterMeta.status].icon} {STATUS_META[chapterMeta.status].label}
+				</button>
+				{#if showStatusMenu && nextStatuses.length > 0}
+					<div class="status-menu">
+						{#each nextStatuses as status}
+							<button class="status-option" onclick={() => changeStatus(status)}>
+								{STATUS_META[status].icon} Move to {STATUS_META[status].label}
+							</button>
+						{/each}
+					</div>
+				{/if}
+			</div>
 		{/if}
 	</div>
 	<div class="header-right">
@@ -137,17 +167,58 @@
 		font-weight: 600;
 	}
 
+	.status-wrapper {
+		position: relative;
+	}
+
 	.status-badge {
-		font-size: 0.65rem;
-		padding: 0.15rem 0.45rem;
+		font-size: 0.7rem;
+		padding: 0.2rem 0.5rem;
 		border-radius: 4px;
+		border: 1px solid transparent;
+		cursor: pointer;
 		text-transform: capitalize;
+		transition: all 0.15s;
 	}
 
 	.status-badge.draft { background: rgba(224, 175, 104, 0.15); color: var(--warning); }
 	.status-badge.revision { background: rgba(187, 154, 247, 0.15); color: var(--secondary); }
 	.status-badge.editing { background: rgba(122, 162, 247, 0.15); color: var(--primary); }
 	.status-badge.final { background: rgba(158, 206, 106, 0.15); color: var(--success); }
+
+	.status-badge:hover {
+		border-color: currentColor;
+	}
+
+	.status-menu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		margin-top: 0.25rem;
+		background: var(--surface-raised);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 0.25rem;
+		z-index: 50;
+		min-width: 160px;
+	}
+
+	.status-option {
+		display: block;
+		width: 100%;
+		text-align: left;
+		padding: 0.4rem 0.6rem;
+		border: none;
+		background: transparent;
+		color: var(--text);
+		font-size: 0.8rem;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	.status-option:hover {
+		background: var(--surface);
+	}
 
 	.header-right {
 		display: flex;
