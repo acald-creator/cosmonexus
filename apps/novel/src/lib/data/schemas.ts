@@ -34,7 +34,7 @@ export const novelSchema: RxJsonSchema<NovelDocType> = {
 		updatedAt: { type: 'string', maxLength: 30 },
 	},
 	required: ['id', 'title', 'author', 'createdAt', 'updatedAt'],
-	indexes: [['genre'], ['author'], ['updatedAt']],
+	indexes: [['author'], ['updatedAt']],
 }
 
 // ─── Chapter ───
