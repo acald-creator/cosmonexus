@@ -9,6 +9,7 @@
 		if (!isSeeded()) {
 			seed()
 		}
+		document.documentElement.setAttribute('data-theme', 'dark')
 	})
 </script>
 
@@ -17,24 +18,25 @@
 </div>
 
 <style>
-	:global(:root) {
-		--bg: var(--color-bg-body, #0f0f14);
-		--surface: var(--color-bg-surface, #1a1b26);
-		--surface-raised: var(--color-bg-raised, #24283b);
-		--border: var(--color-border, #2f3347);
-		--text: var(--color-text-primary, #c0caf5);
-		--text-dim: var(--color-text-secondary, #a9b1d6);
-		--muted: var(--color-text-muted, #565f89);
-		--primary: var(--color-accent-primary, #7aa2f7);
-		--primary-dim: rgba(122, 162, 247, 0.1);
-		--secondary: var(--color-accent-secondary, #bb9af7);
-		--accent: #7dcfff;
-		--success: var(--color-success, #9ece6a);
-		--warning: var(--color-warning, #e0af68);
-		--error: var(--color-error, #f7768e);
-		--font-sans: var(--font-family-sans, 'Inter', -apple-system, sans-serif);
-		--font-serif: var(--font-family-display, 'Georgia', serif);
-		--font-mono: var(--font-family-mono, 'JetBrains Mono', monospace);
+	:global([data-theme="dark"]) {
+		/* Bridge acaldwell-dev tokens to novel app shorthand variables */
+		--bg: var(--background-body);
+		--surface: var(--background-surface);
+		--surface-raised: var(--background-muted);
+		--border: var(--border-light);
+		--text: var(--text-primary);
+		--text-dim: var(--text-secondary);
+		--muted: var(--text-muted);
+		--primary: var(--color-accent-main);
+		--primary-dim: var(--color-accent-soft);
+		--secondary: var(--color-accent-pink);
+		--accent: var(--color-accent-blue);
+		--success: var(--color-success-text);
+		--warning: var(--color-warning-text);
+		--error: var(--color-error-text);
+		--font-sans: var(--font-family-sans);
+		--font-serif: var(--font-family-display);
+		--font-mono: var(--font-family-mono);
 	}
 
 	:global(*, *::before, *::after) {
