@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-ui-svelte",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"type": "module",
 	"svelte": "./dist/index.js",
 	"exports": {
