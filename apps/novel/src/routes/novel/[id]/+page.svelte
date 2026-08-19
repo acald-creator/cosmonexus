@@ -2,16 +2,30 @@
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
 	import Header from '$lib/components/Header.svelte'
-	import { getNovel } from '$lib/data/novels'
+	import SmartCTA from '$lib/components/SmartCTA.svelte'
+	import AuthorSection from '$lib/components/AuthorSection.svelte'
+	import SocialProof from '$lib/components/SocialProof.svelte'
+	import ChapterProgressIndicator from '$lib/components/ChapterProgressIndicator.svelte'
+	import RelatedNovels from '$lib/components/RelatedNovels.svelte'
+	import { getNovel, listNovels } from '$lib/data/novels'
+	import { getProgress } from '$lib/data/reading-progress'
+	import { formatReadingTime, getPublishedWordCount, computeUpdateFrequency } from '$lib/data/reading-time'
 	import type { NovelMeta } from '@cosmonexus/nova-types'
 
 	const novelId = $derived($page.params.id)
 	let novel = $state<NovelMeta | null>(null)
-	let totalWords = $derived(novel?.chapters.reduce((sum, ch) => sum + ch.wordCount, 0) ?? 0)
-	let publishedChapters = $derived(novel?.chapters.filter(ch => ch.status === 'final' || ch.status === 'editing') ?? [])
+	let allNovels = $state<NovelMeta[]>([])
+	let progress = $derived(novel ? getProgress(novel.id) : null)
+	let publishedChapters = $derived(
+		novel?.chapters.filter(ch => ch.status === 'final' || ch.status === 'editing').sort((a, b) => a.order - b.order) ?? []
+	)
+	let totalWords = $derived(novel ? getPublishedWordCount(novel) : 0)
+	let readingTime = $derived(formatReadingTime(totalWords))
+	let updateFreq = $derived(novel ? computeUpdateFrequency(novel) : null)
 
 	onMount(() => {
 		novel = getNovel(novelId)
+		allNovels = listNovels()
 	})
 </script>
 
@@ -19,14 +33,14 @@
 
 {#if novel}
 	<main class="novel-page">
-		<!-- Hero: Cover + Info -->
+		<!-- Hero -->
 		<section class="hero">
 			<div class="cover-wrapper">
 				{#if novel.coverUrl}
 					<img src={novel.coverUrl} alt="{novel.title} cover" class="cover-image" />
 				{:else}
 					<div class="cover-placeholder">
-						<span class="cover-initial">{novel.title.charAt(0)}</span>
+						<span>{novel.title.charAt(0)}</span>
 					</div>
 				{/if}
 			</div>
@@ -36,44 +50,59 @@
 					<span class="genre">{novel.genre}</span>
 				{/if}
 				<h1>{novel.title}</h1>
-				<p class="author">by {novel.author}</p>
+				<p class="author-name">by {novel.author}</p>
 
+				<!-- Stats -->
 				<div class="stats">
-					<span class="stat">{publishedChapters.length} chapters</span>
-					<span class="stat-divider">·</span>
-					<span class="stat">{totalWords.toLocaleString()} words</span>
+					<span>{publishedChapters.length} chapters</span>
+					<span class="dot">·</span>
+					<span>{readingTime}</span>
+					<span class="dot">·</span>
+					<span>{totalWords.toLocaleString()} words</span>
+					{#if updateFreq}
+						<span class="dot">·</span>
+						<span>{updateFreq}</span>
+					{/if}
 				</div>
+
+				<!-- Social Proof -->
+				<SocialProof novelId={novel.id} />
 
 				{#if novel.synopsis}
 					<p class="synopsis">{novel.synopsis}</p>
 				{/if}
 
-				{#if publishedChapters.length > 0}
-					<a href="/novel/{novel.id}/{publishedChapters[0].order}" class="cta">
-						Start Reading
-					</a>
-				{/if}
+				<!-- Smart CTA -->
+				<SmartCTA {novel} />
 			</div>
 		</section>
 
-		<!-- Chapter List -->
-		<section class="chapters">
-			<h2 class="chapters-heading">Chapters</h2>
-			<ol class="chapter-list">
-				{#each publishedChapters as chapter, i}
-					<li>
-						<a href="/novel/{novel.id}/{chapter.order}" class="chapter-row">
-							<span class="chapter-num">{chapter.order}</span>
-							<span class="chapter-title">{chapter.title}</span>
-							<span class="chapter-words">{chapter.wordCount.toLocaleString()} words</span>
-						</a>
-					</li>
-				{/each}
-			</ol>
+		<!-- Author -->
+		<AuthorSection author={novel.author} novelId={novel.id} />
+
+		<!-- Chapters -->
+		<section class="chapters" aria-label="Chapter list">
+			<h2 class="section-heading">Chapters</h2>
 			{#if publishedChapters.length === 0}
-				<p class="no-chapters">No published chapters yet. Check back soon.</p>
+				<p class="empty">No published chapters yet. Check back soon.</p>
+			{:else}
+				<ol class="chapter-list">
+					{#each publishedChapters as chapter}
+						<li>
+							<a href="/novel/{novel.id}/{chapter.order}" class="chapter-row">
+								<ChapterProgressIndicator read={!!progress?.chaptersRead[chapter.id]} />
+								<span class="chapter-num">{chapter.order}</span>
+								<span class="chapter-title">{chapter.title}</span>
+								<span class="chapter-time">{formatReadingTime(chapter.wordCount)}</span>
+							</a>
+						</li>
+					{/each}
+				</ol>
 			{/if}
 		</section>
+
+		<!-- Related -->
+		<RelatedNovels currentNovel={novel} {allNovels} />
 	</main>
 {:else}
 	<main class="novel-page">
@@ -86,27 +115,23 @@
 		max-width: var(--measure-wide, 80ch);
 		margin-inline: auto;
 		padding-inline: var(--space-page);
-		padding-block: var(--space-section);
+		padding-block: var(--spacing-10);
 	}
 
-	.not-found {
-		text-align: center;
+	.not-found, .empty {
 		color: var(--text-muted);
-		padding-block: var(--space-section);
+		font-style: italic;
 	}
 
-	/* ─── Hero ─── */
+	/* Hero */
 	.hero {
 		display: grid;
 		grid-template-columns: auto 1fr;
 		gap: var(--spacing-10);
 		align-items: start;
-		padding-block-end: var(--space-section);
-		border-block-end: 1px solid var(--border-light);
-		margin-block-end: var(--space-section);
 	}
 
-	@container (max-width: 600px) {
+	@media (max-width: 768px) {
 		.hero {
 			grid-template-columns: 1fr;
 			justify-items: center;
@@ -114,14 +139,12 @@
 		}
 	}
 
-	/* ─── Cover ─── */
 	.cover-wrapper {
 		width: clamp(140px, 20vw, 200px);
 		aspect-ratio: 2 / 3;
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		box-shadow: var(--shadow-lg, 0 8px 24px oklch(0% 0 0 / 0.3));
-		flex-shrink: 0;
 	}
 
 	.cover-image {
@@ -136,26 +159,22 @@
 		background: var(--background-elevated);
 		display: grid;
 		place-items: center;
-	}
-
-	.cover-initial {
 		font-family: var(--font-display);
 		font-size: var(--font-size-5xl);
 		font-weight: var(--font-weight-extrabold);
 		color: var(--text-muted);
-		opacity: 0.5;
+		opacity: 0.4;
 	}
 
-	/* ─── Info ─── */
 	.hero-info {
 		display: flex;
 		flex-direction: column;
-		gap: var(--spacing-2);
+		gap: var(--spacing-1);
 	}
 
 	.genre {
 		font-size: var(--font-size-xs);
-		font-family: var(--font-mono);
+		font-family: var(--font-family-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: var(--color-accent-main);
@@ -169,24 +188,23 @@
 		letter-spacing: -0.03em;
 	}
 
-	.author {
+	.author-name {
 		font-size: var(--font-size-base);
 		color: var(--text-muted);
+		margin-block-end: var(--spacing-2);
 	}
 
 	.stats {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: var(--spacing-2);
 		font-size: var(--font-size-sm);
-		font-family: var(--font-mono);
+		font-family: var(--font-family-mono);
 		color: var(--text-muted);
-		margin-block: var(--spacing-2);
 	}
 
-	.stat-divider {
-		opacity: 0.4;
-	}
+	.dot { opacity: 0.3; }
 
 	.synopsis {
 		font-size: var(--font-size-base);
@@ -196,34 +214,19 @@
 		margin-block: var(--spacing-3);
 	}
 
-	.cta {
-		display: inline-block;
-		margin-block-start: var(--spacing-4);
-		padding: var(--spacing-3) var(--spacing-6);
-		background: var(--color-accent-main);
-		color: var(--background-body);
-		font-weight: var(--font-weight-semibold);
-		font-size: var(--font-size-sm);
-		border-radius: var(--radius-lg);
-		text-decoration: none;
-		width: fit-content;
-		transition: opacity var(--motion-micro);
+	/* Chapters */
+	.chapters {
+		margin-block-start: var(--spacing-8);
 	}
 
-	.cta:hover {
-		opacity: 0.85;
-		color: var(--background-body);
-	}
-
-	/* ─── Chapters ─── */
-	.chapters-heading {
-		font-family: var(--font-ui, var(--font-family-sans));
+	.section-heading {
+		font-family: var(--font-family-sans);
 		font-size: var(--font-size-xs);
 		font-weight: var(--font-weight-semibold);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: var(--text-muted);
-		margin-block-end: var(--spacing-6);
+		margin-block-end: var(--spacing-5);
 	}
 
 	.chapter-list {
@@ -235,21 +238,21 @@
 
 	.chapter-row {
 		display: grid;
-		grid-template-columns: 3ch 1fr auto;
-		gap: var(--spacing-4);
-		align-items: baseline;
+		grid-template-columns: 16px 3ch 1fr auto;
+		gap: var(--spacing-3);
+		align-items: center;
 		padding-block: var(--spacing-3);
 		border-block-end: 1px solid var(--border-light);
 		text-decoration: none;
-		transition: transform var(--motion-micro);
+		transition: transform var(--duration-100) ease;
 	}
 
 	.chapter-row:hover {
-		transform: translateX(var(--spacing-2));
+		transform: translateX(var(--spacing-1));
 	}
 
 	.chapter-num {
-		font-family: var(--font-mono);
+		font-family: var(--font-family-mono);
 		font-size: var(--font-size-xs);
 		color: var(--text-muted);
 	}
@@ -260,14 +263,9 @@
 		color: var(--text-primary);
 	}
 
-	.chapter-words {
-		font-family: var(--font-mono);
+	.chapter-time {
+		font-family: var(--font-family-mono);
 		font-size: var(--font-size-xs);
 		color: var(--text-muted);
-	}
-
-	.no-chapters {
-		color: var(--text-muted);
-		font-style: italic;
 	}
 </style>
