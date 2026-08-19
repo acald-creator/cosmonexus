@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-types",
-	"version": "0.0.1",
+	"version": "0.5.2",
 	"type": "module",
 	"exports": {
 		".": {

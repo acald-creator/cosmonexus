@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-react",
-	"version": "0.0.1",
+	"version": "0.2.15",
 	"type": "module",
 	"exports": {
 		".": {
