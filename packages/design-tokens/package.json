@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/design-tokens",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -41,7 +41,7 @@
 	],
 	"sideEffects": ["**/*.css", "./dist/global.css.js", "./dist/global.css.cjs"],
 	"scripts": {
-		"build": "bun run tokens:generate && tsup",
+		"build": "bun run tokens:generate && tsup && bun run tokens:generate",
 		"tokens:generate": "bun scripts/generate.ts",
 		"test": "vitest run",
 		"lint": "biome check .",

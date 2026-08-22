@@ -1,5 +1,11 @@
 # @cosmonexus/design-tokens
 
+## 0.1.1
+
+### Patch Changes
+
+- Mark CSS custom-property files as side-effectful so bundlers keep `--cnx-*` tokens.
+
 ## 0.1.0
 
 ### Minor Changes
