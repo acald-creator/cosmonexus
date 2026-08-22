@@ -1,5 +1,11 @@
 # @cosmonexus/nova-emotion
 
+## 0.1.1
+
+### Patch Changes
+
+- Depend on `@cosmonexus/design-tokens@^0.1.1` so token CSS stays side-effectful.
+
 ## 0.1.0
 
 ### Minor Changes

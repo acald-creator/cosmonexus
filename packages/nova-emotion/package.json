@@ -1,6 +1,6 @@
 {
 	"name": "@cosmonexus/nova-emotion",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"exports": {
 		".": {
@@ -23,7 +23,7 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@cosmonexus/design-tokens": "workspace:*"
+		"@cosmonexus/design-tokens": "^0.1.1"
 	},
 	"peerDependencies": {
 		"@emotion/css": "^11.13.0"
