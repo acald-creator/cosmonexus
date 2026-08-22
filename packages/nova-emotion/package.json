@@ -1,0 +1,38 @@
+{
+	"name": "@cosmonexus/nova-emotion",
+	"version": "0.1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./tokens": {
+			"types": "./dist/tokens.d.ts",
+			"import": "./dist/tokens.js",
+			"require": "./dist/tokens.cjs"
+		}
+	},
+	"files": ["dist", "rescript", "rescript.json"],
+	"sideEffects": ["./dist/tokens.js", "./dist/tokens.cjs"],
+	"scripts": {
+		"build": "tsup",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@cosmonexus/design-tokens": "workspace:*"
+	},
+	"peerDependencies": {
+		"@emotion/css": "^11.13.0"
+	},
+	"devDependencies": {
+		"@cosmonexus/tsconfig": "workspace:*",
+		"@emotion/css": "^11.13.5"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

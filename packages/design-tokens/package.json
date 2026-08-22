@@ -39,7 +39,7 @@
 		"dist/**",
 		"src/**"
 	],
-	"sideEffects": false,
+	"sideEffects": ["**/*.css", "./dist/global.css.js", "./dist/global.css.cjs"],
 	"scripts": {
 		"build": "bun run tokens:generate && tsup",
 		"tokens:generate": "bun scripts/generate.ts",

@@ -1,0 +1,16 @@
+{
+	"name": "@cosmonexus/nova-emotion",
+	"sources": [
+		{
+			"dir": "rescript",
+			"subdirs": true
+		}
+	],
+	"package-specs": [
+		{
+			"module": "esmodule",
+			"in-source": true
+		}
+	],
+	"suffix": ".bs.js"
+}

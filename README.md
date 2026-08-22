@@ -12,6 +12,7 @@ Monorepo for `@cosmonexus` packages — design tokens, reactive primitives, dual
 | [`@cosmonexus/nova-react`](./packages/nova-react) | React hooks and providers for nova-store | 0.0.1 |
 | [`@cosmonexus/nova-ui`](./packages/nova-ui) | React component library (Button, Input, DataTable, etc.) | 0.0.1 |
 | [`@cosmonexus/nova-ui-solid`](./packages/nova-ui-solid) | Solid.js component library (same API as nova-ui) | 0.0.1 |
+| [`@cosmonexus/nova-emotion`](./packages/nova-emotion) | Emotion adapter (`css` / `cx` / `var(--cnx-*)` theme) | 0.1.0 |
 | [`@cosmonexus/cm`](./packages/cm) | CodeMirror 6 wrappers with sub-path exports | 0.0.1 |
 | [`@cosmonexus/stellate`](./packages/stellate) | Editor extension framework (Editor, Extension, EventEmitter) | 0.0.1 |
 | [`@cosmonexus/tsconfig`](./packages/tsconfig) | Shared TypeScript configs (base, library, app) | 0.0.1 |
@@ -23,6 +24,7 @@ Monorepo for `@cosmonexus` packages — design tokens, reactive primitives, dual
 │  Apps (docs, playground)                            │
 ├──────────────────────┬──────────────────────────────┤
 │  nova-ui (React)     │  nova-ui-solid (Solid)       │
+│                      │  nova-emotion (Emotion)      │
 ├──────────────────────┴──────────────────────────────┤
 │  design-tokens (vanilla-extract + Open Props)       │
 ├─────────────────────────────────────────────────────┤
@@ -74,7 +76,8 @@ nova-store ──────────── nova-react      │
                             │           │
 design-tokens ──────── nova-ui ─────────┘
     │                                   
-    └──────────── nova-ui-solid         
+    ├──────────── nova-ui-solid
+    └──────────── nova-emotion
 
 cm ────── stellate
 ```
@@ -87,7 +90,7 @@ The design token layer (`@cosmonexus/design-tokens`) provides:
 - **Dark theme** — OKLCH color values with teal/cyan accent (hue 175)
 - **Global reset** — CSS reset + base typography referencing the contract
 
-Both `nova-ui` (React) and `nova-ui-solid` (Solid) consume the same token contract, ensuring visual consistency across frameworks.
+`nova-ui` (React), `nova-ui-solid` (Solid), and `nova-emotion` (Emotion / ReScript) consume the same token contract. Emotion reads the public `--cnx-*` CSS variables; it does not depend on vanilla-extract.
 
 ### Token Categories
 

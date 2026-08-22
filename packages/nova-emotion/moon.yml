@@ -1,0 +1,35 @@
+type: library
+language: typescript
+
+tasks:
+  build:
+    command: tsup
+    inputs:
+      - src/**/*
+      - tsup.config.ts
+      - package.json
+    outputs:
+      - dist/**/*
+    deps:
+      - ^:build
+
+  test:
+    command: vitest run
+    inputs:
+      - src/**/*
+      - vitest.config.ts
+    deps:
+      - ~:build
+
+  lint:
+    command: biome check .
+    inputs:
+      - src/**/*
+
+  typecheck:
+    command: tsc --noEmit
+    inputs:
+      - src/**/*
+      - tsconfig.json
+    deps:
+      - ^:build
