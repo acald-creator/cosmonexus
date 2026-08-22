@@ -7,7 +7,7 @@ inclusion: auto
 ## Tooling
 
 - **Runtime/Package Manager:** Bun (workspaces)
-- **Task Runner:** Moon (`moon run :build`, `moon run :test`, etc.)
+- **Task Runner:** Moon 2 (`moon run :build`, `moon run :test`, etc.). Config is `.moon/toolchains.yml` and `layer` in each `moon.yml`. Workspace edges must be listed in `dependsOn` because the bun toolchain is not enabled (needs proto >= 0.60).
 - **Bundler:** tsup (ESM + CJS + DTS per package)
 - **Linting/Formatting:** Biome (single config at root `biome.json`)
 - **Type Checking:** TypeScript strict mode (shared configs in `packages/tsconfig/`)

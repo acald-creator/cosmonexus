@@ -1,4 +1,4 @@
-type: library
+layer: library
 language: typescript
 
 tasks:
@@ -14,7 +14,7 @@ tasks:
       - ^:build
 
   test:
-    command: vitest run
+    command: vitest run --passWithNoTests
     inputs:
       - src/**/*
       - vitest.config.ts

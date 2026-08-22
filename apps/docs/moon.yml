@@ -1,10 +1,14 @@
-type: application
+layer: application
 language: typescript
+
+dependsOn:
+  - nova-ui
 
 tasks:
   dev:
-    command: echo "TODO: configure dev server"
-    local: true
+    script: 'echo "TODO: configure dev server"'
+    options:
+      runInCI: false
 
   lint:
     command: biome check .

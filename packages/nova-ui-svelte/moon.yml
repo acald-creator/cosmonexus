@@ -1,9 +1,12 @@
-type: library
+layer: library
 language: typescript
+
+dependsOn:
+  - design-tokens
 
 tasks:
   build:
-    command: svelte-package
+    command: bunx svelte-package
     inputs:
       - src/lib/**/*
       - svelte.config.js
@@ -19,7 +22,7 @@ tasks:
       - src/lib/**/*
 
   typecheck:
-    command: svelte-check --tsconfig ./tsconfig.json
+    command: bunx svelte-check --tsconfig ./tsconfig.json
     inputs:
       - src/lib/**/*
       - tsconfig.json

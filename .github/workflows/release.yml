@@ -22,10 +22,16 @@ jobs:
           bun-version: latest
 
       - run: bun install --frozen-lockfile
+        env:
+          MOON_TOOLCHAIN_FORCE_GLOBALS: 'true'
 
       - run: bun run build
+        env:
+          MOON_TOOLCHAIN_FORCE_GLOBALS: 'true'
 
       - run: bun run test
+        env:
+          MOON_TOOLCHAIN_FORCE_GLOBALS: 'true'
 
       - name: Create Release Pull Request or Publish
         id: changesets

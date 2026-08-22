@@ -1,13 +1,20 @@
-type: application
+layer: application
 language: typescript
+
+dependsOn:
+  - design-tokens
+  - nova-store
+  - nova-svelte
+  - nova-types
+  - prose
 
 tasks:
   dev:
-    command: vite dev
-    local: true
+    command: bunx vite dev
+    preset: server
 
   build:
-    command: vite build
+    command: bunx vite build
     inputs:
       - src/**/*
       - svelte.config.js
@@ -24,7 +31,7 @@ tasks:
       - src/**/*
 
   typecheck:
-    command: svelte-check --tsconfig ./tsconfig.json
+    command: bunx svelte-check --tsconfig ./tsconfig.json
     inputs:
       - src/**/*
       - tsconfig.json

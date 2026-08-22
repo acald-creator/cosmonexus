@@ -1,0 +1,8 @@
+$schema: 'https://moonrepo.dev/schemas/toolchain.json'
+
+# Use Bun from PATH (local install, oven-sh/setup-bun in CI).
+# Enabling `javascript` + `bun` requires proto >= 0.60; this machine has 0.53.1.
+typescript:
+  # Packages are built with tsup, not `tsc -b`. Leaving this on rewrites
+  # tsconfig.json references on every moon run.
+  syncProjectReferences: false

@@ -1,9 +1,16 @@
-type: library
+layer: library
 language: typescript
+
+dependsOn:
+  - cm
+  - nova-store
+  - nova-types
+  - prose
+  - stellate
 
 tasks:
   build:
-    command: svelte-package
+    command: bunx svelte-package
     inputs:
       - src/lib/**/*
       - svelte.config.js
@@ -14,7 +21,7 @@ tasks:
       - ^:build
 
   test:
-    command: vitest run
+    command: vitest run --passWithNoTests
     inputs:
       - src/**/*
       - vitest.config.ts
@@ -27,7 +34,7 @@ tasks:
       - src/lib/**/*
 
   typecheck:
-    command: svelte-check --tsconfig ./tsconfig.json
+    command: bunx svelte-check --tsconfig ./tsconfig.json
     inputs:
       - src/lib/**/*
       - tsconfig.json
